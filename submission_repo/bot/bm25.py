@@ -38,20 +38,26 @@ class BM25:
             self.lengths.append(len(words))
             for word, count in Counter(words).items():
                 self.postings[word].append((i, count))
+        # (url, position) -> doc index, so answer.py can fetch the chunk
+        # next to a result without another database call.
+        self.by_position = {(m.get("url"), m.get("position")): i
+                            for i, m in enumerate(metas)}
         n = len(docs)
         self.avg_len = sum(self.lengths) / max(n, 1)
         self.idf = {w: math.log(1 + (n - len(p) + 0.5) / (len(p) + 0.5))
                     for w, p in self.postings.items()}
 
+    def images_on(self, question: str, urls: set, k: int) -> list[dict]:
+        """The k image descriptions on the given pages that best match the question."""
+        scores = self._scores(question)
+        on_pages = [i for i, m in enumerate(self.metas)
+                    if m.get("kind") == "image" and m.get("url") in urls]
+        best = sorted(on_pages, key=lambda i: scores.get(i, 0), reverse=True)[:k]
+        return [{"text": self.docs[i], "metadata": self.metas[i], "score": scores.get(i, 0)}
+                for i in best]
+
     def search(self, question: str, k: int = 20, where: dict = None) -> list[dict]:
-        scores = defaultdict(float)
-        for word in set(tokenize(question)):
-            idf = self.idf.get(word)
-            if idf is None:
-                continue
-            for i, count in self.postings[word]:
-                norm = count + K1 * (1 - B + B * self.lengths[i] / self.avg_len)
-                scores[i] += idf * count * (K1 + 1) / norm
+        scores = self._scores(question)
 
         if where:
             # Plain equality only, e.g. {"year": "2019"}. That covers the
@@ -62,6 +68,21 @@ class BM25:
         best = sorted(scores, key=scores.get, reverse=True)[:k]
         return [{"text": self.docs[i], "metadata": self.metas[i], "score": scores[i]}
                 for i in best]
+
+    def _scores(self, question: str) -> dict:
+        scores = defaultdict(float)
+        for word in set(tokenize(question)):
+            idf = self.idf.get(word)
+            if idf is None:
+                continue
+            for i, count in self.postings[word]:
+                norm = count + K1 * (1 - B + B * self.lengths[i] / self.avg_len)
+                scores[i] += idf * count * (K1 + 1) / norm
+        return scores
+
+    def text_at(self, url: str, position: int) -> str | None:
+        i = self.by_position.get((url, position))
+        return None if i is None else self.docs[i]
 
 
 _index = None

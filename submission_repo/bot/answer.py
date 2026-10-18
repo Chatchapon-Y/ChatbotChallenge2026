@@ -6,7 +6,7 @@ rewrite.
 """
 import re
 
-from bot.bm25 import get_bm25
+from bot.bm25 import get_bm25, tokenize
 from bot.llm import chat
 from bot.store import get_store, query
 
@@ -23,6 +23,7 @@ If the context is empty or unrelated to the question, answer from your
 own general knowledge. Do not mention the context in your answer.
 
 Reply with the answer only. No explanation, no preamble, no hedging.
+Do not end the answer with a full stop.
 If the question asks how many, reply with a number.
 If the answer is an abbreviation, give the full name too.
 
@@ -35,6 +36,8 @@ CONFIG = {
     "k": 8,              # 5 often found the right page but the wrong chunk of it
     "search": "hybrid",  # "vector", "bm25", or "hybrid" (both, merged)
     "candidates": 20,    # how many each search returns before merging
+    "neighbors": 1,      # also read this many following chunks of the same page, 0 = off
+    "page_images": 4,    # also read this many image descriptions from the retrieved pages, 0 = off
 }
 
 # Reciprocal Rank Fusion. A chunk scores 1/(RRF_K + rank) in each list
@@ -52,6 +55,15 @@ REFUSAL = re.compile(
     r"|cannot (be determined|determine|find)"
     r"|\bunknown\b|i don.?t know|i do not know|not sure",
     re.I)
+# gpt-4o-mini sometimes restates the question despite the prompt: "The
+# winning teams in Pitch New Tech Ideas in 2025 were SmartSocks, ...".
+# Workshop 0: points are deducted when the output format is wrong. A
+# reply that repeats several question words around a verb is a sentence,
+# so ask once more for the answer alone.
+SENTENCE_VERB = re.compile(r"\b(is|are|was|were|has|have|had|does|did)\b", re.I)
+SHORTEN = ("Rewrite your reply as the answer only: just the name, number, date "
+           "or short phrase, not a sentence. Keep every item if there are several. "
+           "No full stop.")
 GUESS_AGAIN = ("Do not say the information is missing. Give your single "
                "best guess. Reply with the answer only.")
 
@@ -66,6 +78,29 @@ def retrieve(question: str, k: int = None, where: dict = None) -> list[dict]:
     """
     k = k or CONFIG["k"]
     store = get_store()
+    chunks = search(store, question, k, where)
+    chunks = add_neighbors(store, chunks, CONFIG["neighbors"])
+    return add_page_images(store, question, chunks, CONFIG["page_images"])
+
+
+def add_page_images(store, question: str, chunks: list[dict], n: int) -> list[dict]:
+    """Append up to n image descriptions from the pages already retrieved.
+
+    A question is worded like the page's text ("winning teams in Pitch
+    New Tech Ideas 2025"), so the search finds the /pitching_2025/ text.
+    The answer is on a poster on that page, whose description says
+    "WINNERS ... SMARTSOCKS" and ranks outside the top results on its own.
+    """
+    if n <= 0:
+        return chunks
+    taken = {(c["metadata"].get("url"), c["metadata"].get("position")) for c in chunks}
+    urls = {c["metadata"].get("url") for c in chunks}
+    images = [im for im in get_bm25(store).images_on(question, urls, n + len(chunks))
+              if (im["metadata"]["url"], im["metadata"]["position"]) not in taken]
+    return chunks + images[:n]
+
+
+def search(store, question: str, k: int, where: dict = None) -> list[dict]:
     if CONFIG["search"] == "vector":
         return query(store, question, k=k, where=where)
     if CONFIG["search"] == "bm25":
@@ -84,6 +119,42 @@ def retrieve(question: str, k: int = None, where: dict = None) -> list[dict]:
             chunks.setdefault(key, c)
     best = sorted(scores, key=scores.get, reverse=True)[:k]
     return [{**chunks[key], "rrf": scores[key]} for key in best]
+
+
+def add_neighbors(store, chunks: list[dict], n: int) -> list[dict]:
+    """Append the next n chunks of the same page to each retrieved chunk.
+
+    Fixed-size chunking can cut a heading from the fact under it: on
+    /funding-scheme/ "Second Round 2025-26" ends chunk 2 and the deadline
+    "February 27 2026" starts chunk 3. The search finds chunk 2, so
+    reading one chunk further brings the answer in.
+
+    A neighbour that is itself in the results is skipped, so no text is
+    sent twice.
+    """
+    if n <= 0:
+        return chunks
+    bm25 = get_bm25(store)
+    taken = {(c["metadata"].get("url"), c["metadata"].get("position")) for c in chunks}
+    out = []
+    for c in chunks:
+        url, pos = c["metadata"].get("url"), c["metadata"].get("position")
+        text = c["text"]
+        # An image description is complete on its own; the "next chunk"
+        # would be a different image of the same page.
+        steps = 0 if c["metadata"].get("kind") == "image" else n
+        for step in range(1, steps + 1):
+            key = (url, pos + step)
+            if key in taken:
+                break
+            nxt = bm25.text_at(*key)
+            if nxt is None:
+                break
+            taken.add(key)
+            # Drop the title line that index.py puts on every chunk.
+            text += "\n" + nxt.split("\n", 1)[-1]
+        out.append({**c, "text": text})
+    return out
 
 
 def rag_answer(question: str) -> str:
@@ -114,9 +185,19 @@ def rag_answer(question: str) -> str:
             {"role": "user", "content": GUESS_AGAIN},
         ])
 
-    # TODO check the format of what came back: if you asked for a
-    # TODO number, make sure you got one, and strip any stray prose.
-    return reply.strip()
+    if looks_like_sentence(question, reply):
+        reply = chat(messages + [
+            {"role": "assistant", "content": reply},
+            {"role": "user", "content": SHORTEN},
+        ])
+    return reply.strip().rstrip(".")
+
+
+def looks_like_sentence(question: str, reply: str) -> bool:
+    """True for "The X of Y was Z", False for "Z" or a long proper name."""
+    if len(reply.split()) < 6 or not SENTENCE_VERB.search(reply):
+        return False
+    return len(set(tokenize(question)) & set(tokenize(reply))) >= 3
 
 
 def rag_answer_batch(questions: list[str]) -> list[str]:

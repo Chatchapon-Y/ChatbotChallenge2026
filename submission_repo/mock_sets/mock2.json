@@ -1,0 +1,124 @@
+[
+ {
+  "level": 1,
+  "question": "What does PCB stand for in electronics?",
+  "answer": "Printed circuit board"
+ },
+ {
+  "level": 1,
+  "question": "What does UAV stand for?",
+  "answer": "Unmanned aerial vehicle"
+ },
+ {
+  "level": 1,
+  "question": "What does RAG stand for in the context of AI chatbots?",
+  "answer": "Retrieval-augmented generation"
+ },
+ {
+  "level": 1,
+  "question": "What does LED stand for?",
+  "answer": "Light-emitting diode"
+ },
+ {
+  "level": 1,
+  "question": "How many bits are there in one byte?",
+  "answer": "8"
+ },
+ {
+  "level": 1,
+  "question": "Who invented the World Wide Web?",
+  "answer": "Tim Berners-Lee"
+ },
+ {
+  "level": 2,
+  "question": "Which two tools does the \"Agentic AI: From Chatbots to Autonomous Agents\" workshop use to build agents?",
+  "answer": "FastMCP and Ollama",
+  "source": "https://innoacademy.engg.hku.hk/20260204_agenticai/"
+ },
+ {
+  "level": 2,
+  "question": "Who supervises the SIG DuckieTown: AI-Driving project?",
+  "answer": "Dr. Loretta Y.K. Choi",
+  "source": "https://innowings.engg.hku.hk/ai_driving/"
+ },
+ {
+  "level": 2,
+  "question": "According to the LoopIt project page, roughly how much does a physical loop station cost?",
+  "answer": "4000HKD",
+  "source": "https://innoacademy.engg.hku.hk/looplt/"
+ },
+ {
+  "level": 2,
+  "question": "According to the coal ash-hardened marine soil project, how much backfilling material do the proposed reclamation megaprojects require?",
+  "answer": "500 million tonnes",
+  "source": "https://innowings.engg.hku.hk/soil-material-for-reclamation/"
+ },
+ {
+  "level": 2,
+  "question": "Which international competition does the HKU UAS team aim to join?",
+  "answer": "AUVSI SUAS",
+  "source": "https://innoacademy.engg.hku.hk/uas5/"
+ },
+ {
+  "level": 2,
+  "question": "Who moderated the TechTalk on Simulation, Optimization and Artificial Intelligence for On-demand Ride Service Operations?",
+  "answer": "Dr Zhan Zhao",
+  "source": "https://innowings.engg.hku.hk/on-demand-ride-service/"
+ },
+ {
+  "level": 3,
+  "question": "According to the software diagram on the Nocodile AI poster, which framework is the frontend built with?",
+  "answer": "Flutter",
+  "source": "https://innoacademy.engg.hku.hk/innoshow11/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2026/04/Nocodile-AI-poster-723x1024.png"
+ },
+ {
+  "level": 3,
+  "question": "Which Thai university's logo appears on the \"Flood Impact Mitigation in Thailand\" poster?",
+  "answer": "Chulalongkorn University",
+  "source": "https://innoacademy.engg.hku.hk/sharing/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2026/09/10th-September-2026-Promotion-Poster-1-724x1024.png"
+ },
+ {
+  "level": 3,
+  "question": "On the 11th Inno Show poster \"Here we turn bacteria into green marketable benefit\", what is step 3 called?",
+  "answer": "Formate Floodgate",
+  "source": "https://innoacademy.engg.hku.hk/innoshow11/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2026/04/IGEM-Poster_-For-submission-Smaghetti-683x1024.png"
+ },
+ {
+  "level": 3,
+  "question": "According to the WeGoALGAE poster, what do its microalgae photobioreactors absorb to purify air?",
+  "answer": "CO2, PM2.5, PM10, toxins and odors",
+  "source": "https://innoacademy.engg.hku.hk/carbon_and_sustainability_technology/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2025/04/A1-poster-WeGoALGAE-724x1024.png"
+ },
+ {
+  "level": 3,
+  "question": "For which event was the game Bubble Sooooooort submitted?",
+  "answer": "Global Game Jam Hong Kong 2025",
+  "source": "https://innoacademy.engg.hku.hk/bubble_sooooooort/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2025/03/01_Bubble-Sooooooort_Poster-723x1024.jpg"
+ },
+ {
+  "level": 3,
+  "question": "What is the pressing range of the Voila Viola mechanism?",
+  "answer": "G3 - A4",
+  "source": "https://innoacademy.engg.hku.hk/viola/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2023/04/08.-Viola-PosterJPG-scaled.jpg"
+ },
+ {
+  "level": 3,
+  "question": "What is the group number of the \"Playing Chess With A Robotic Arm\" project?",
+  "answer": "FYP19004",
+  "source": "https://innowings.engg.hku.hk/playchesswithrobot/",
+  "image": "https://innowings.engg.hku.hk/wp-content/uploads/2020/07/playchesswithrobot-poster.jpg"
+ },
+ {
+  "level": 3,
+  "question": "Which physics engine was used for simulations of the BREED HKU quadruped robot DoggiE?",
+  "answer": "PyBullet",
+  "source": "https://innoacademy.engg.hku.hk/doggiebreed2022/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2022/05/09.-BREED-HKUs-quadruped-robot-DoggiE-Poster-Cheuk-Yin-Bryan-LAM-1.jpg"
+ }
+]

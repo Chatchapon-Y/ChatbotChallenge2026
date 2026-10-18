@@ -1,0 +1,124 @@
+[
+ {
+  "level": 1,
+  "question": "What does NLP stand for in AI?",
+  "answer": "Natural language processing"
+ },
+ {
+  "level": 1,
+  "question": "What does BIM stand for in construction?",
+  "answer": "Building Information Modelling"
+ },
+ {
+  "level": 1,
+  "question": "What does OCR stand for?",
+  "answer": "Optical character recognition"
+ },
+ {
+  "level": 1,
+  "question": "What does DOF stand for when describing a robotic arm?",
+  "answer": "Degrees of freedom"
+ },
+ {
+  "level": 1,
+  "question": "What does EV stand for in the automotive industry?",
+  "answer": "Electric vehicle"
+ },
+ {
+  "level": 1,
+  "question": "What is the process of joining electronic components to a circuit board with a melted metal alloy called?",
+  "answer": "Soldering"
+ },
+ {
+  "level": 2,
+  "question": "Who is the Alertio danger alert app designed for?",
+  "answer": "Deaf people",
+  "source": "https://innoacademy.engg.hku.hk/alertio/"
+ },
+ {
+  "level": 2,
+  "question": "Who supervised the Train Data Analysis for MTR final year project?",
+  "answer": "Prof. Reynold Cheng",
+  "source": "https://innowings.engg.hku.hk/train-data-analysis/"
+ },
+ {
+  "level": 2,
+  "question": "According to the Innovation Wing Tutor page, on which floors of the Hui Oi Chow Science Building is the Innovation Wing located?",
+  "answer": "G/F and LG/F",
+  "source": "https://innowings.engg.hku.hk/tutor/"
+ },
+ {
+  "level": 2,
+  "question": "What inspired the AR app Hearoad?",
+  "answer": "Lennon Wall",
+  "source": "https://innowings.engg.hku.hk/hearoad/"
+ },
+ {
+  "level": 2,
+  "question": "Who is the principal investigator of \"Wireless AI Perception: A New Sense for Machine Intelligence\"?",
+  "answer": "Dr. Chenshu Wu",
+  "source": "https://innowings.engg.hku.hk/wireless-ai/"
+ },
+ {
+  "level": 2,
+  "question": "Who was the speaker of the HKAE TechTalk on Vision-driven Robots?",
+  "answer": "Professor Yunhui Liu",
+  "source": "https://innowings.engg.hku.hk/vision-driven-robots/"
+ },
+ {
+  "level": 3,
+  "question": "According to the HKU Robocon recruitment poster, where are the recruitment talks held?",
+  "answer": "Event Hall, Tam Wing Fan Innovation Wing",
+  "source": "https://innowings.engg.hku.hk/robocon_1/",
+  "image": "https://innowings.engg.hku.hk/wp-content/uploads/2022/08/Recruitment-Poster-725x1024.jpg"
+ },
+ {
+  "level": 3,
+  "question": "According to the Receiptify poster, how many pounds of solid waste are generated during receipt production?",
+  "answer": "302 million pounds",
+  "source": "https://innoacademy.engg.hku.hk/receiptify/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2022/11/28.-Receiptify-A1-Poster.png"
+ },
+ {
+  "level": 3,
+  "question": "According to the development timeline on the Nocodile AI poster, when was the team founded?",
+  "answer": "Jan 2025",
+  "source": "https://innoacademy.engg.hku.hk/innoshow11/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2026/04/Nocodile-AI-poster-723x1024.png"
+ },
+ {
+  "level": 3,
+  "question": "According to the HKU UAS poster for the 8th Inno Show, what is the venue of the AUVSI SUAS competition?",
+  "answer": "Webster Field, St. Inigoes, Maryland",
+  "source": "https://innoacademy.engg.hku.hk/uas8/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2023/04/12.-Unmanned-Aerial-System-Team-Poster-1085x1536.jpg"
+ },
+ {
+  "level": 3,
+  "question": "According to the HINCare poster for the 7th Inno Show, who is the team member?",
+  "answer": "Hu Zhenwei",
+  "source": "https://innoacademy.engg.hku.hk/hincare7/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2022/11/02.-HINCare-An-Intelligent-Timebanking-System-for-Elderly-Care-A1-Poster-scaled.jpg"
+ },
+ {
+  "level": 3,
+  "question": "According to the Robotic Bartender poster, what payload can the OpenMANIPULATOR-P handle?",
+  "answer": "3 kg",
+  "source": "https://innoacademy.engg.hku.hk/bartender/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2023/04/05.-OpenMANIPULATOR-P-Bartender-Poster-1086x1536.jpeg"
+ },
+ {
+  "level": 3,
+  "question": "In FOOD City PANDA Run!, how many food items does the player start with on the tray?",
+  "answer": "3",
+  "source": "https://innoacademy.engg.hku.hk/foodcitypanda/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2022/05/28.-FOOD-City-PANDA-Run-Poster-Masked-Youran-Zhao-scaled.jpg"
+ },
+ {
+  "level": 3,
+  "question": "According to the HKU Racing roll-up banner, what is the maximum motor efficiency of an electric vehicle?",
+  "answer": "80%",
+  "source": "https://innoacademy.engg.hku.hk/hkur4/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2021/05/HKURacing-Roll-Up-Banner-1-Tin-Tin-768x2427.jpg"
+ }
+]

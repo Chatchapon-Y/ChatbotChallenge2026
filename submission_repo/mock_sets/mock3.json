@@ -1,0 +1,124 @@
+[
+ {
+  "level": 1,
+  "question": "What does ROS stand for in robotics?",
+  "answer": "Robot Operating System"
+ },
+ {
+  "level": 1,
+  "question": "What does LLM stand for in AI?",
+  "answer": "Large language model"
+ },
+ {
+  "level": 1,
+  "question": "What does SLA stand for in 3D printing?",
+  "answer": "Stereolithography"
+ },
+ {
+  "level": 1,
+  "question": "What does GPU stand for?",
+  "answer": "Graphics processing unit"
+ },
+ {
+  "level": 1,
+  "question": "What is the SI unit of electric current?",
+  "answer": "Ampere"
+ },
+ {
+  "level": 1,
+  "question": "What does STEM stand for in education?",
+  "answer": "Science, Technology, Engineering and Mathematics"
+ },
+ {
+  "level": 2,
+  "question": "On what date did students from King's College visit the Innovation Wing?",
+  "answer": "October 4, 2019",
+  "source": "https://innowings.engg.hku.hk/kings-visit/"
+ },
+ {
+  "level": 2,
+  "question": "In the BusIMan BIM design project, what links the South Wing and the North Wing?",
+  "answer": "An arch bridge",
+  "source": "https://innoacademy.engg.hku.hk/busiman/"
+ },
+ {
+  "level": 2,
+  "question": "Which course was the Ping project done for?",
+  "answer": "ELEC3644 Advanced Mobile Apps Development",
+  "source": "https://innoacademy.engg.hku.hk/ping/"
+ },
+ {
+  "level": 2,
+  "question": "The AGV robot in the Smart Product Development project is built in the shape of what?",
+  "answer": "Hong Kong Tram",
+  "source": "https://innowings.engg.hku.hk/agvrobot/"
+ },
+ {
+  "level": 2,
+  "question": "Who was the speaker of the HKAES TechTalk \"How clean is the air we breathe in urban areas?\"?",
+  "answer": "Professor Xiang-dong Li",
+  "source": "https://innowings.engg.hku.hk/airinurbanareas/"
+ },
+ {
+  "level": 2,
+  "question": "Which motion sensor was integrated with the ESP32 in the 3D printed robot dog project?",
+  "answer": "MPU6050",
+  "source": "https://innoacademy.engg.hku.hk/3d-print-dog/"
+ },
+ {
+  "level": 3,
+  "question": "What is the highest booth number shown on the floor plan of the 1st Inno Show?",
+  "answer": "53",
+  "source": "https://innoacademy.engg.hku.hk/innoshow1/1st-innoshow-note/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2019/04/floorplan.png"
+ },
+ {
+  "level": 3,
+  "question": "Which JDA 2024 winner from HKU joins the James Dyson Award Sharing Session?",
+  "answer": "AirRing48",
+  "source": "https://innoacademy.engg.hku.hk/sharing/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2026/03/Black-White-Minimalist-Seminar-Event-Flyer-A2-Landscape-768x543.png"
+ },
+ {
+  "level": 3,
+  "question": "On the 11th Inno Show poster \"Here we turn bacteria into green marketable benefit\", what is step 5 called?",
+  "answer": "Hydrogen Burst",
+  "source": "https://innoacademy.engg.hku.hk/innoshow11/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2026/04/IGEM-Poster_-For-submission-Smaghetti-683x1024.png"
+ },
+ {
+  "level": 3,
+  "question": "On the HKU Robocon 2022 poster, what are the two robots R1 and R2 called?",
+  "answer": "Hitter and Seeker",
+  "source": "https://innoacademy.engg.hku.hk/robocon7/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2022/11/14.-HKU-Robocon-2022-A1-Poster-V2.png"
+ },
+ {
+  "level": 3,
+  "question": "What is the website of the WeGoALGAE student interest group shown on its poster?",
+  "answer": "www.wegoalgae.com",
+  "source": "https://innoacademy.engg.hku.hk/carbon_and_sustainability_technology/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2025/04/A1-poster-WeGoALGAE-724x1024.png"
+ },
+ {
+  "level": 3,
+  "question": "Who is the supervisor named on the \"Waiting for you\" poster of the Cat Object project?",
+  "answer": "Leith K.Y. Chan",
+  "source": "https://innoacademy.engg.hku.hk/cat_object/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2023/04/21.-Cat-Object-Poster-v2-scaled.jpg"
+ },
+ {
+  "level": 3,
+  "question": "Which Arduino board does the \"Playing Chess With A Robotic Arm\" project use?",
+  "answer": "Arduino Mega 2560",
+  "source": "https://innowings.engg.hku.hk/playchesswithrobot/",
+  "image": "https://innowings.engg.hku.hk/wp-content/uploads/2020/07/playchesswithrobot-poster.jpg"
+ },
+ {
+  "level": 3,
+  "question": "According to the ICRA AI Challenge 2020 poster, at how many FPS can the tracking pipeline run?",
+  "answer": "140 FPS",
+  "source": "https://innowings.engg.hku.hk/icra2020/",
+  "image": "https://innowings.engg.hku.hk/wp-content/uploads/2020/11/poster-RoboMaster-ICRA-AI-Challenge-Team-678x1024.jpg"
+ }
+]

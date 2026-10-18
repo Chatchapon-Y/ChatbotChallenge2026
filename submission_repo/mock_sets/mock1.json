@@ -1,0 +1,124 @@
+[
+ {
+  "level": 1,
+  "question": "What does CNC stand for in machining?",
+  "answer": "Computer Numerical Control"
+ },
+ {
+  "level": 1,
+  "question": "What does CAD stand for in engineering design?",
+  "answer": "Computer-Aided Design"
+ },
+ {
+  "level": 1,
+  "question": "What does PLA, a common 3D printing filament, stand for?",
+  "answer": "Polylactic acid"
+ },
+ {
+  "level": 1,
+  "question": "What does IoT stand for?",
+  "answer": "Internet of Things"
+ },
+ {
+  "level": 1,
+  "question": "What is the SI unit of electrical resistance?",
+  "answer": "Ohm"
+ },
+ {
+  "level": 1,
+  "question": "Which company developed the quadruped robot Spot?",
+  "answer": "Boston Dynamics"
+ },
+ {
+  "level": 2,
+  "question": "Who was the speaker of the HKAE TechTalk \"AI + IoT + Construction = ?\"?",
+  "answer": "Ir Dr Conrad Wong",
+  "source": "https://innowings.engg.hku.hk/ai-iot-construction/"
+ },
+ {
+  "level": 2,
+  "question": "On what date was the Young Scholar TechTalk on the Cyber-Physical Spare Parts Intralogistics System for Aviation MRO held?",
+  "answer": "15th November 2022",
+  "source": "https://innowings.engg.hku.hk/aviation-mro/"
+ },
+ {
+  "level": 2,
+  "question": "Who supervised the Decentralised media sharing platform final year project?",
+  "answer": "Dr. J.T.H. Yuen",
+  "source": "https://innoacademy.engg.hku.hk/decentralised-media-sharing-platform/"
+ },
+ {
+  "level": 2,
+  "question": "Who is the supervisor of the CLIC-Chat project?",
+  "answer": "Prof. Benjamin C.M. Kao",
+  "source": "https://innoacademy.engg.hku.hk/clic_chat/"
+ },
+ {
+  "level": 2,
+  "question": "Which course was the Smart Soccer Robot project done for?",
+  "answer": "ENGG1320 Engineers in the modern world",
+  "source": "https://innowings.engg.hku.hk/soccer-robot/"
+ },
+ {
+  "level": 2,
+  "question": "Who was the project leader of the \"Self-healing, microencapsulation and granular materials\" project?",
+  "answer": "Chow Cheuk Hei Scott",
+  "source": "https://innowings.engg.hku.hk/selfhealing-microencapsulation-granular-materials/"
+ },
+ {
+  "level": 3,
+  "question": "What was the application deadline for the Singapore Study Tour held in the 2025 reading week?",
+  "answer": "27 January 2025",
+  "source": "https://innoacademy.engg.hku.hk/studytour/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2025/01/Singapore-Study-Tour-TBC-Poster-v2.jpg"
+ },
+ {
+  "level": 3,
+  "question": "What is the name of the SIG being launched according to the \"Flood Impact Mitigation in Thailand\" poster?",
+  "answer": "IoT Beyond Lab",
+  "source": "https://innoacademy.engg.hku.hk/sharing/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2026/09/10th-September-2026-Promotion-Poster-1-724x1024.png"
+ },
+ {
+  "level": 3,
+  "question": "According to the DoggiE poster of BREED HKU, how many servos are used for the four limbs?",
+  "answer": "12",
+  "source": "https://innoacademy.engg.hku.hk/doggiebreed2022/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2022/05/09.-BREED-HKUs-quadruped-robot-DoggiE-Poster-Cheuk-Yin-Bryan-LAM-1.jpg"
+ },
+ {
+  "level": 3,
+  "question": "Which battery company's logo appears at the bottom of the HKU Racing poster for the 8th Inno Show?",
+  "answer": "LFP Power",
+  "source": "https://innoacademy.engg.hku.hk/hkur8/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2023/05/25.-HKU-Racing-Poster-1024x723.png"
+ },
+ {
+  "level": 3,
+  "question": "In the game Bubble Sooooooort, which three options does the player have each turn?",
+  "answer": "Pop, Swap, Attack",
+  "source": "https://innoacademy.engg.hku.hk/bubble_sooooooort/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2025/03/01_Bubble-Sooooooort_Poster-723x1024.jpg"
+ },
+ {
+  "level": 3,
+  "question": "According to the HINCare poster, how many elderly citizens is Hong Kong estimated to have in 2037?",
+  "answer": "2.37 million",
+  "source": "https://innoacademy.engg.hku.hk/hincare7/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2022/11/02.-HINCare-An-Intelligent-Timebanking-System-for-Elderly-Care-A1-Poster-scaled.jpg"
+ },
+ {
+  "level": 3,
+  "question": "According to the Snake 4D poster, where is the online demo for desktop browsers hosted?",
+  "answer": "simmer.io/@GJTiquia/snake-4d",
+  "source": "https://innowings.engg.hku.hk/snake4d/",
+  "image": "https://innowings.engg.hku.hk/wp-content/uploads/2020/06/Snake-4D-Poster-01-for-InnoShow.jpg"
+ },
+ {
+  "level": 3,
+  "question": "Which book-keeping app inspired the idea of FOOD City PANDA Run!?",
+  "answer": "Fortune City",
+  "source": "https://innoacademy.engg.hku.hk/foodcitypanda/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2022/05/28.-FOOD-City-PANDA-Run-Poster-Masked-Youran-Zhao-scaled.jpg"
+ }
+]

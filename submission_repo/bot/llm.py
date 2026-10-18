@@ -99,8 +99,9 @@ def describe_image(image_path: str, prompt: str) -> str:
     path = Path(image_path)
     mime = mimetypes.guess_type(path.name)[0] or "image/jpeg"
     b64 = base64.b64encode(path.read_bytes()).decode()
+    # No max_tokens: gpt-5-mini rejects that parameter with a 400.
     r = _client(VISION_URL).chat.completions.create(
-        model=VISION_DEPLOYMENT, max_tokens=800,
+        model=VISION_DEPLOYMENT,
         messages=[{"role": "user", "content": [
             {"type": "text", "text": prompt},
             {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{b64}"}},

@@ -4,6 +4,8 @@ Run from submission_repo:
     python eval_dev.py          # dev_set.json from the organisers (9 questions)
     python eval_dev.py lv2      # dev_set_lv2.json, our own level 2 questions
     python eval_dev.py lv2 bm25 # same, with one search mode: vector, bm25 or hybrid
+    python eval_dev.py lv2 noneighbors   # without reading the next chunk
+    python eval_dev.py mock_sets/mock1.json   # any question file, here a mock preliminary
 
 Mark each answer yourself (1 / 0.5 / 0). Both checks below are crude,
 a stricter version of the lab 2 test: the whole expected answer, or 80%
@@ -45,7 +47,8 @@ def short_url(url: str) -> str:
 
 def run_eval(path: str) -> None:
     dev = json.load(open(path, encoding="utf-8"))
-    print(f"{path}   k={CONFIG['k']}   search={CONFIG['search']}\n")
+    print(f"{path}   k={CONFIG['k']}   search={CONFIG['search']}   "
+          f"neighbors={CONFIG['neighbors']}\n")
 
     found_count, match_count, slowest = 0, 0, 0.0
     for d in dev:
@@ -92,7 +95,13 @@ if __name__ == "__main__":
     for mode in ("vector", "bm25", "hybrid"):
         if mode in args:
             CONFIG["search"] = mode
-    if "lv2" in args:
+    if "noneighbors" in args:
+        CONFIG["neighbors"] = 0
+    paths = [a for a in args if a.endswith(".json")]
+    if paths:
+        for path in paths:
+            run_eval(path)
+    elif "lv2" in args:
         eval_lv2()
     else:
         eval_dev()

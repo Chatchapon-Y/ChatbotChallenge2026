@@ -1,0 +1,124 @@
+[
+ {
+  "level": 1,
+  "question": "What does PID stand for in a PID controller?",
+  "answer": "Proportional integral derivative"
+ },
+ {
+  "level": 1,
+  "question": "What does LiDAR stand for?",
+  "answer": "Light Detection and Ranging"
+ },
+ {
+  "level": 1,
+  "question": "What does API stand for in software?",
+  "answer": "Application programming interface"
+ },
+ {
+  "level": 1,
+  "question": "What does AGV stand for in logistics and robotics?",
+  "answer": "Automated guided vehicle"
+ },
+ {
+  "level": 1,
+  "question": "What does VR stand for?",
+  "answer": "Virtual reality"
+ },
+ {
+  "level": 1,
+  "question": "Which programming language are Arduino sketches written in?",
+  "answer": "C++"
+ },
+ {
+  "level": 2,
+  "question": "Who supervised the \"On-the-fly\" imaging bioassay platform project?",
+  "answer": "Prof. Kevin K. Tsia",
+  "source": "https://innowings.engg.hku.hk/on-the-fly/"
+ },
+ {
+  "level": 2,
+  "question": "Where is the Student Trainee Recruitment Talk on 25 September 2026 held?",
+  "answer": "Brainstorming Area, Tam Wing Fan Innovation Wing One",
+  "source": "https://innoacademy.engg.hku.hk/20260925_sratalk/"
+ },
+ {
+  "level": 2,
+  "question": "Which two works inspired the puzzle platforming game REVIVER?",
+  "answer": "Portal and Tenet",
+  "source": "https://innoacademy.engg.hku.hk/reviver/"
+ },
+ {
+  "level": 2,
+  "question": "Who was the speaker of the Tech Talk on Anti-Covid-19 stainless steel?",
+  "answer": "Dr. Litao Liu",
+  "source": "https://innowings.engg.hku.hk/stainless-steel/"
+ },
+ {
+  "level": 2,
+  "question": "From which university did tutor leader Kyle K.H. Ho receive his Bachelor of Engineering?",
+  "answer": "Miami University",
+  "source": "https://innowings.engg.hku.hk/kyle/"
+ },
+ {
+  "level": 2,
+  "question": "In the Machine Learning in Archaeology project, which area has the HKU archaeological team been investigating since 2009?",
+  "answer": "Vedi, Armenia",
+  "source": "https://innoacademy.engg.hku.hk/ml_archaeology/"
+ },
+ {
+  "level": 3,
+  "question": "According to the HKU Robocon recruitment poster, what time do the recruitment talks run?",
+  "answer": "18:30 - 20:30",
+  "source": "https://innowings.engg.hku.hk/robocon_1/",
+  "image": "https://innowings.engg.hku.hk/wp-content/uploads/2022/08/Recruitment-Poster-725x1024.jpg"
+ },
+ {
+  "level": 3,
+  "question": "On what date is the James Dyson Award Sharing Session held?",
+  "answer": "10 April 2026",
+  "source": "https://innoacademy.engg.hku.hk/sharing/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2026/03/Black-White-Minimalist-Seminar-Event-Flyer-A2-Landscape-768x543.png"
+ },
+ {
+  "level": 3,
+  "question": "According to the Nocodile AI poster, how many students have been taught in its student-led workshops?",
+  "answer": "200+",
+  "source": "https://innoacademy.engg.hku.hk/innoshow11/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2026/04/Nocodile-AI-poster-723x1024.png"
+ },
+ {
+  "level": 3,
+  "question": "According to the HKU Robocon 2022 poster, which awards did the team win at Robocon Hong Kong 2022?",
+  "answer": "Best Performance Award and 2nd Runner Up",
+  "source": "https://innoacademy.engg.hku.hk/robocon7/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2022/11/14.-HKU-Robocon-2022-A1-Poster-V2.png"
+ },
+ {
+  "level": 3,
+  "question": "According to the Receiptify poster, how many trees does receipt use consume?",
+  "answer": "3 million",
+  "source": "https://innoacademy.engg.hku.hk/receiptify/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2022/11/28.-Receiptify-A1-Poster.png"
+ },
+ {
+  "level": 3,
+  "question": "According to the Robotic Bartender poster, what is the maximum reach of the OpenMANIPULATOR-P including gripper?",
+  "answer": "767.3 mm",
+  "source": "https://innoacademy.engg.hku.hk/bartender/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2023/04/05.-OpenMANIPULATOR-P-Bartender-Poster-1086x1536.jpeg"
+ },
+ {
+  "level": 3,
+  "question": "In the Cake decorating using 3D Printer project, what is the diameter of the nozzle that the food paste is pushed out of?",
+  "answer": "3mm",
+  "source": "https://innoacademy.engg.hku.hk/cake-deco/",
+  "image": "https://innoacademy.engg.hku.hk/wp-content/uploads/2022/05/03.-Cake-decorating-using-3D-Printer-Poster-Kishoth-Padmanabhan.jpg"
+ },
+ {
+  "level": 3,
+  "question": "According to the ICRA AI Challenge 2020 poster, what rank did the HKU team achieve among 80+ international teams?",
+  "answer": "10th",
+  "source": "https://innowings.engg.hku.hk/icra2020/",
+  "image": "https://innowings.engg.hku.hk/wp-content/uploads/2020/11/poster-RoboMaster-ICRA-AI-Challenge-Team-678x1024.jpg"
+ }
+]
