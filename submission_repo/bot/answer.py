@@ -26,6 +26,7 @@ Reply with the answer only. No explanation, no preamble, no hedging.
 Do not end the answer with a full stop.
 If the question asks how many, reply with a number.
 If the answer is an abbreviation, give the full name too.
+If the answer is a web address, give the whole address, not only the site name.
 
 Always give a specific answer, even when the context does not contain
 it: make your best guess from the context and your own knowledge. A wrong
