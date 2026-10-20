@@ -9,7 +9,7 @@ import re
 from pathlib import Path
 
 from bot.bm25 import get_bm25, tokenize
-from bot.llm import chat
+from bot.llm import VISION_DEPLOYMENT, VISION_URL, _client, chat
 from bot.store import get_store, query
 
 # --------------------------------------------------------------------
@@ -69,6 +69,35 @@ SHORTEN = ("Rewrite your reply as the answer only: just the name, number, date "
            "No full stop.")
 GUESS_AGAIN = ("Do not say the information is missing. Give your single "
                "best guess. Reply with the answer only.")
+
+# gpt-4o-mini finds the right numbers and then gets the sum wrong: "15
+# workbenches with 6 seats each" -> 66, "66 vs 55 square metres, how
+# much larger" -> 55. Questions worded like a calculation go to
+# gpt-5-mini, which reasons before it answers. Everything else stays on
+# gpt-4o-mini, which is faster.
+ARITHMETIC = re.compile(
+    r"\bhow (many|much) (more|fewer|less|larger|bigger|smaller|longer|shorter|higher|lower)\b"
+    r"|\bdifference\b|\bcombined\b|\bin total\b|\baltogether\b|\bsum of\b"
+    r"|\btotal (number|amount|cost|area|prize)\b|\bdays (were there )?between\b",
+    re.I)
+CALCULATE = ("This question needs arithmetic. Find every number it needs in the "
+             "context, check that each one belongs to the item the question means, "
+             "then calculate. Reply with the final answer only: the number and its "
+             "unit, no working.")
+REASON_TIMEOUT = 20     # seconds; on timeout gpt-4o-mini answers instead
+
+
+def reason(messages: list[dict]) -> str:
+    """One gpt-5-mini call. Returns "" on any failure so the caller can fall back."""
+    try:
+        r = _client(VISION_URL).chat.completions.create(
+            model=VISION_DEPLOYMENT, messages=messages, reasoning_effort="low",
+            max_completion_tokens=4000, timeout=REASON_TIMEOUT,
+        )
+        return r.choices[0].message.content or ""
+    except Exception:
+        return ""
+
 
 # Workshop posters per year, counted from /workshop/ by build/counts.py.
 # An LLM reading chunks cannot count them: the page text does not say
@@ -213,7 +242,14 @@ def rag_answer(question: str) -> str:
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}"},
     ]
-    reply = chat(messages)
+    reply = ""
+    if ARITHMETIC.search(question):
+        reply = reason([
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}\n\n{CALCULATE}"},
+        ])
+    if not reply.strip():
+        reply = chat(messages)
 
     if REFUSAL.search(reply):
         reply = chat(messages + [
