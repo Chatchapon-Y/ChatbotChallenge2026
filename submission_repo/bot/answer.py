@@ -4,7 +4,9 @@ Two functions must exist with these exact names and signatures. Every
 other line in this file, and every file under build/, is yours to
 rewrite.
 """
+import json
 import re
+from pathlib import Path
 
 from bot.bm25 import get_bm25, tokenize
 from bot.llm import chat
@@ -67,6 +69,35 @@ SHORTEN = ("Rewrite your reply as the answer only: just the name, number, date "
            "No full stop.")
 GUESS_AGAIN = ("Do not say the information is missing. Give your single "
                "best guess. Reply with the answer only.")
+
+# Workshop posters per year, counted from /workshop/ by build/counts.py.
+# An LLM reading chunks cannot count them: the page text does not say
+# which poster sits under which "Year 20xx" heading.
+POSTER_COUNTS = Path("data/poster_counts.json")
+_poster_counts = None
+
+
+def counted_answer(question: str) -> str | None:
+    """'How many workshop posters ... for 2025?' -> "31", else None.
+
+    Only a question naming workshop posters, "how many" and exactly one
+    year in the table is answered here; everything else goes to the
+    normal search, so a near miss costs nothing.
+    """
+    global _poster_counts
+    q = question.lower()
+    if "how many" not in q or "poster" not in q or "workshop" not in q:
+        return None
+    years = re.findall(r"\b(20\d\d)\b", q)
+    if len(years) != 1:
+        return None
+    if _poster_counts is None:
+        try:
+            _poster_counts = json.loads(POSTER_COUNTS.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            _poster_counts = {}
+    count = _poster_counts.get(years[0])
+    return None if count is None else str(count)
 
 
 def retrieve(question: str, k: int = None, where: dict = None) -> list[dict]:
@@ -164,6 +195,10 @@ def rag_answer(question: str) -> str:
     Runs once per question with a 30 second budget. Anything expensive
     belongs in build/, not here.
     """
+    counted = counted_answer(question)
+    if counted is not None:
+        return counted
+
     chunks = retrieve(question)
 
     # TODO [W2 b4] once this works: decompose compound questions,
