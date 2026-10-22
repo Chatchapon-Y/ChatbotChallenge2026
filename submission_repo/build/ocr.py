@@ -59,14 +59,14 @@ def ocr_all(images: list[dict], limit: int = None) -> dict:
     An image with no text, or too small to be more than an icon, is
     cached as "" so it is not downloaded again.
     """
-    cache = json.loads(OCR_PATH.read_text()) if OCR_PATH.exists() else {}
+    cache = json.loads(OCR_PATH.read_text(encoding="utf-8")) if OCR_PATH.exists() else {}
     todo = by_priority([im for im in images if im["src"] not in cache])[:limit]
     print(f"{len(images)} images, {len(cache)} already read, reading {len(todo)}")
     lock, done = threading.Lock(), [0]
 
     def save():
         tmp = OCR_PATH.with_suffix(".tmp")
-        tmp.write_text(json.dumps(cache, indent=1, ensure_ascii=False))
+        tmp.write_text(json.dumps(cache, indent=1, ensure_ascii=False), encoding="utf-8")
         tmp.replace(OCR_PATH)
 
     def work(im: dict):
@@ -108,10 +108,10 @@ def ocr_all(images: list[dict], limit: int = None) -> dict:
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    images = pick_images(json.loads(Path("data/images.json").read_text()))
+    images = pick_images(json.loads(Path("data/images.json").read_text(encoding="utf-8")))
     ocr_all(images, int(args[0]) if args and args[0].isdigit() else None)
 
-    descriptions = json.loads(CACHE_PATH.read_text()) if CACHE_PATH.exists() else {}
+    descriptions = json.loads(CACHE_PATH.read_text(encoding="utf-8")) if CACHE_PATH.exists() else {}
     try:
         index_descriptions(descriptions, images)
     except Exception as exc:

@@ -29,6 +29,13 @@ Do not end the answer with a full stop.
 If the question asks how many, reply with a number.
 If the answer is an abbreviation, give the full name too.
 If the answer is a web address, give the whole address, not only the site name.
+If the question asks for a colour or colour scheme, name the main colours in
+plain words, e.g. "Blue and white".
+If the question asks for names (teams, people, projects), give every name in
+full as written, separated by semicolons.
+If the question names a year, use only context about that year.
+If the question asks about the first or earliest of a series (first workshop,
+first edition), compare the dates in the context and use the earliest one.
 
 Always give a specific answer, even when the context does not contain
 it: make your best guess from the context and your own knowledge. A wrong
@@ -129,6 +136,28 @@ def counted_answer(question: str) -> str | None:
     return None if count is None else str(count)
 
 
+# A question about one year must not be answered from another year's
+# page: the Pitch New Tech Ideas 2026 question ranked three 2025 winner
+# posters above the 2026 one, and the model named the 2025 winners.
+YEAR = re.compile(r"\b(20\d\d)\b")
+
+
+def other_year(question_years: list[str], chunk: dict) -> bool:
+    """True if the chunk's page, title or image file is about a different year.
+
+    Only the address, title and file name count, not the text: the 2026
+    page mentions 2025 too. The /uploads/2025/ folder is when a file was
+    uploaded, not what it is about, so only the file's own name is read.
+    """
+    if len(question_years) != 1:
+        return False
+    m = chunk["metadata"]
+    label = " ".join([m.get("url", ""), m.get("title", ""),
+                      str(m.get("image", "")).rsplit("/", 1)[-1]])
+    years = set(YEAR.findall(label))
+    return bool(years) and question_years[0] not in years
+
+
 def retrieve(question: str, k: int = None, where: dict = None) -> list[dict]:
     """Return the k chunks most relevant to the question.
 
@@ -156,18 +185,23 @@ def add_page_images(store, question: str, chunks: list[dict], n: int) -> list[di
         return chunks
     taken = {(c["metadata"].get("url"), c["metadata"].get("position")) for c in chunks}
     urls = {c["metadata"].get("url") for c in chunks}
+    years = list(set(YEAR.findall(question)))
     images = [im for im in get_bm25(store).images_on(question, urls, n + len(chunks))
-              if (im["metadata"]["url"], im["metadata"]["position"]) not in taken]
+              if (im["metadata"]["url"], im["metadata"]["position"]) not in taken
+              and not other_year(years, im)]
     return chunks + images[:n]
 
 
 def search(store, question: str, k: int, where: dict = None) -> list[dict]:
-    if CONFIG["search"] == "vector":
-        return query(store, question, k=k, where=where)
-    if CONFIG["search"] == "bm25":
-        return get_bm25(store).search(question, k=k, where=where)
-
+    years = list(set(YEAR.findall(question)))
     n = CONFIG["candidates"]
+    if CONFIG["search"] in ("vector", "bm25"):
+        if CONFIG["search"] == "vector":
+            ranked = query(store, question, k=n, where=where)
+        else:
+            ranked = get_bm25(store).search(question, k=n, where=where)
+        return sorted(ranked, key=lambda c: other_year(years, c))[:k]
+
     ranked_lists = [
         query(store, question, k=n, where=where),
         get_bm25(store).search(question, k=n, where=where),
@@ -178,7 +212,8 @@ def search(store, question: str, k: int, where: dict = None) -> list[dict]:
             key = (c["metadata"].get("url"), c["metadata"].get("position"))
             scores[key] = scores.get(key, 0) + 1 / (RRF_K + rank + 1)
             chunks.setdefault(key, c)
-    best = sorted(scores, key=scores.get, reverse=True)[:k]
+    # Chunks about another year go to the back, behind every other candidate.
+    best = sorted(scores, key=lambda key: (other_year(years, chunks[key]), -scores[key]))[:k]
     return [{**chunks[key], "rrf": scores[key]} for key in best]
 
 

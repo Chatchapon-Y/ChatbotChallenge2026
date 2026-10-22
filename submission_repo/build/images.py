@@ -14,6 +14,8 @@ Run from submission_repo, on HKU Wi-Fi or HKUVPN:
                                               then index everything cached
     python -m build.images                    describe every image, then index
     python -m build.images index              index the cache, no vision calls
+                                              (changed chunks keep their old
+                                              embedding; add "fresh" to re-embed)
     python -m build.images merge their.json   add a teammate's cached descriptions
 
 `python -m build.index` wipes data/chroma, image descriptions included.
@@ -56,6 +58,7 @@ Report only what is visible in the image. Do not add outside knowledge. If a sec
 
 CACHE_PATH = Path("data/descriptions.json")
 OCR_PATH = Path("data/ocr.json")            # written by build/ocr.py
+COLOURS_PATH = Path("data/colours.json")    # written by build/colours.py
 OCR_MAX_CHARS = 3000
 # An image whose OCR text is at least this long is a poster, slide or
 # certificate: OCR already copied what it says, so it skips the vision
@@ -294,10 +297,10 @@ def describe_all(images: list[dict], limit: int = None) -> dict:
     line downstream. Key the cache by image URL. An icon-sized file is
     cached as "" so it is not downloaded again.
     """
-    cache = json.loads(CACHE_PATH.read_text()) if CACHE_PATH.exists() else {}
+    cache = json.loads(CACHE_PATH.read_text(encoding="utf-8")) if CACHE_PATH.exists() else {}
     todo = [im for im in images if im["src"] not in cache]
     if OCR_PATH.exists():
-        ocr = json.loads(OCR_PATH.read_text())
+        ocr = json.loads(OCR_PATH.read_text(encoding="utf-8"))
         texty = [im for im in todo if len(ocr.get(im["src"], "")) >= OCR_ENOUGH]
         todo = [im for im in todo if len(ocr.get(im["src"], "")) < OCR_ENOUGH]
         print(f"{len(texty)} images left to OCR alone (text-heavy), "
@@ -317,7 +320,7 @@ def describe_all(images: list[dict], limit: int = None) -> dict:
     def save():
         CACHE_PATH.parent.mkdir(exist_ok=True)
         tmp = CACHE_PATH.with_suffix(".tmp")
-        tmp.write_text(json.dumps(cache, indent=1))
+        tmp.write_text(json.dumps(cache, indent=1), encoding="utf-8")
         tmp.replace(CACHE_PATH)
 
     def work(im: dict):
@@ -381,22 +384,79 @@ def describe_all(images: list[dict], limit: int = None) -> dict:
     return cache
 
 
-def index_descriptions(descriptions: dict, images: list[dict]) -> None:
+# Words in a file name that say nothing about the picture.
+FILE_NOISE = {"img", "dsc", "scaled", "resized", "copy", "final", "png", "jpg", "jpeg",
+              "landscape", "portrait", "web", "new", "edit", "edited", "photo", "image", "pic"}
+_vocab = None
+
+
+def vocabulary() -> set:
+    """Every word of 3+ letters in the scraped pages, for splitting file names."""
+    global _vocab
+    if _vocab is None:
+        pages = json.loads(Path("data/pages.json").read_text(encoding="utf-8"))
+        _vocab = {w for p in pages for w in re.findall(r"[a-z]{3,}", p.get("text", "").lower())}
+    return _vocab
+
+
+def split_glued(word: str) -> list[str]:
+    """"trainedmember" -> ["trained", "member"]; a word it cannot split stays whole.
+
+    Fewest pieces wins, each piece a word from the pages, so "selfservice"
+    is "self service" and not "sel f service".
+    """
+    vocab = vocabulary()
+    if len(word) < 7 or word in vocab:
+        return [word]
+    best = {0: []}
+    for end in range(1, len(word) + 1):
+        for start in range(max(0, end - 20), end - 2):
+            if start in best and word[start:end] in vocab:
+                pieces = best[start] + [word[start:end]]
+                if end not in best or len(pieces) < len(best[end]):
+                    best[end] = pieces
+    return best.get(len(word), [word])
+
+
+def file_words(src: str) -> str:
+    """Words in an image's file name: the only place a site icon says what it is.
+
+    The Wet Lab's "Trained Members Only" icon is trainedmember-150x150.png;
+    its description says "white person on a blue square" and nothing a
+    question about trained members would match.
+    """
+    name = Path(SIZE.sub("", src.split("?")[0])).stem
+    name = re.sub(r"([a-z])([A-Z])", r"\1 \2", name)     # RoboMaster -> Robo Master
+    words = []
+    for token in re.split(r"[^A-Za-z0-9]+", name):
+        low = token.lower()
+        if (len(low) < 2 or low in FILE_NOISE or re.fullmatch(r"\d+x\d+", low)
+                or (low.isdigit() and not re.fullmatch(r"20\d\d", low))):
+            continue
+        words += split_glued(low) if low.isalpha() else [low]
+    if not any(len(w) >= 3 and w.isalpha() for w in words):
+        return ""       # camera names like IMG_5770 say nothing
+    return " ".join(words)
+
+
+def index_descriptions(descriptions: dict, images: list[dict], fresh: bool = False) -> None:
     """Add image chunks to the same store as the scraped text.
 
     One chunk per image that has a vision description, OCR text from
-    build/ocr.py, or both. Only chunks that are new or whose text changed
+    build/ocr.py, colours from build/colours.py, or any of these. Only chunks that are new or whose text changed
     are embedded, because embedding thousands of chunks again on every
     run spends the key's token quota for nothing. Each chunk carries the
     same metadata fields as a text chunk of its page.
     """
     pages = {p["url"]: p for p in
              json.loads(Path("data/pages.json").read_text(encoding="utf-8"))}
-    ocr = json.loads(OCR_PATH.read_text()) if OCR_PATH.exists() else {}
+    ocr = json.loads(OCR_PATH.read_text(encoding="utf-8")) if OCR_PATH.exists() else {}
+    colours = (json.loads(COLOURS_PATH.read_text(encoding="utf-8"))
+               if COLOURS_PATH.exists() else {})
     chunks, per_page = {}, {}
     for im in images:
         text, read = descriptions.get(im["src"]), ocr.get(im["src"], "")[:OCR_MAX_CHARS]
-        if not text and not read:
+        if not text and not read and not colours.get(im["src"]):
             continue
         page = pages.get(im["page"], {"url": im["page"], "title": "", "text": ""})
         n = per_page[im["page"]] = per_page.get(im["page"], -1) + 1
@@ -406,10 +466,15 @@ def index_descriptions(descriptions: dict, images: list[dict]) -> None:
         # exactly, which the vision model sometimes marks [unreadable].
         parts = [page.get("title", ""),
                  "Image on this page. " + " ".join(filter(None, [im.get("alt"), im.get("caption")]))]
+        if file_words(im["src"]):
+            parts.append("File name: " + file_words(im["src"]))
         if read:
             parts.append("Text in the image: " + read)
         if text:
             parts.append(text)
+        # OCR-only posters have no colours; build/colours.py adds them.
+        if colours.get(im["src"]):
+            parts.append("COLOURS: " + colours[im["src"]])
         chunks["img_" + hashlib.md5(im["src"].encode()).hexdigest()] = ("\n".join(parts), {
             "url":       im["page"],
             "title":     page.get("title", ""),
@@ -422,16 +487,31 @@ def index_descriptions(descriptions: dict, images: list[dict]) -> None:
         })
 
     store = get_store(reset=False)
-    old = store.get(where={"kind": "image"}, include=["documents", "metadatas"])
+    old = store.get(where={"kind": "image"}, include=["documents", "metadatas", "embeddings"])
+    old_ids = set(old["ids"])
     unchanged = {i for i, doc, meta in zip(old["ids"], old["documents"], old["metadatas"])
                  if i in chunks and chunks[i] == (doc, meta)}
-    stale = [i for i in old["ids"] if i not in unchanged]
+    stale = [i for i in old["ids"] if i not in chunks]
     for i in range(0, len(stale), 1000):
         store.delete(ids=stale[i:i + 1000])
-    new = [i for i in chunks if i not in unchanged]
+    # A chunk whose text grew a line (a file name, colours) keeps its old
+    # embedding unless fresh=True: the vector barely moves, BM25 sees the
+    # new words at once, and 4,000 re-embeddings would cost quota.
+    vectors = dict(zip(old["ids"], old["embeddings"]))
+    changed = [i for i in chunks if i in old_ids and i not in unchanged]
+    if fresh:
+        store.delete(ids=changed)
+    else:
+        for i in range(0, len(changed), 500):
+            batch = changed[i:i + 500]
+            store.update(ids=batch, documents=[chunks[j][0] for j in batch],
+                         metadatas=[chunks[j][1] for j in batch],
+                         embeddings=[vectors[j] for j in batch])
+    new = [i for i in chunks if i not in old_ids or (fresh and i in changed)]
     add_to_store(store, [chunks[i][0] for i in new], [chunks[i][1] for i in new], ids=new)
     print(f"image chunks: {len(chunks)} total, {len(new)} embedded now, "
-          f"{len(unchanged)} unchanged, {len(set(stale) - set(new))} removed")
+          f"{0 if fresh else len(changed)} text updated, {len(unchanged)} unchanged, "
+          f"{len(stale)} removed")
 
 
 def merge(other_path: str, images: list[dict]) -> None:
@@ -441,8 +521,8 @@ def merge(other_path: str, images: list[dict]) -> None:
     (photo-1024x683.jpg vs photo.jpg), so both are matched by the name
     with the size removed.
     """
-    ours = json.loads(CACHE_PATH.read_text()) if CACHE_PATH.exists() else {}
-    theirs = json.loads(Path(other_path).read_text())
+    ours = json.loads(CACHE_PATH.read_text(encoding="utf-8")) if CACHE_PATH.exists() else {}
+    theirs = json.loads(Path(other_path).read_text(encoding="utf-8"))
     by_name = {SIZE.sub("", im["src"].split("?")[0]): im["src"] for im in images}
     added, unknown = 0, 0
     for src, text in theirs.items():
@@ -452,7 +532,7 @@ def merge(other_path: str, images: list[dict]) -> None:
         elif text and not ours.get(key):
             ours[key] = text
             added += 1
-    CACHE_PATH.write_text(json.dumps(ours, indent=1))
+    CACHE_PATH.write_text(json.dumps(ours, indent=1), encoding="utf-8")
     print(f"added {added}, already had {len(theirs) - added - unknown}, "
           f"not in our image list {unknown}. Now {len(ours)} cached.")
 
@@ -469,7 +549,7 @@ if __name__ == "__main__":
         describe_one(url, effort, detail, side)
         sys.exit()
 
-    images = pick_images(json.loads(Path("data/images.json").read_text()))
+    images = pick_images(json.loads(Path("data/images.json").read_text(encoding="utf-8")))
 
     if args and args[0] == "merge":
         # python -m build.images merge path/to/their/descriptions.json
@@ -477,10 +557,13 @@ if __name__ == "__main__":
         sys.exit()
 
     if args and args[0] == "index":
-        descriptions = json.loads(CACHE_PATH.read_text())
-    else:
-        limit = int(args[0]) if args and args[0].isdigit() else None
-        word = next((a for a in args if not a.isdigit()), "")
-        subset = [im for im in images if word in im["page"]]
-        descriptions = describe_all(subset, limit)
+        # python -m build.images index [fresh]   fresh: re-embed changed chunks too
+        descriptions = json.loads(CACHE_PATH.read_text(encoding="utf-8"))
+        index_descriptions(descriptions, images, fresh="fresh" in args)
+        sys.exit()
+
+    limit = int(args[0]) if args and args[0].isdigit() else None
+    word = next((a for a in args if not a.isdigit()), "")
+    subset = [im for im in images if word in im["page"]]
+    descriptions = describe_all(subset, limit)
     index_descriptions(descriptions, images)

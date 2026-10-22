@@ -28,6 +28,7 @@ import hashlib
 import io
 import json
 import sys
+import threading
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -71,10 +72,13 @@ TILE_PROMPT = """This is one quarter of a photo taken in the {zone} of the HKU I
 
 
 def zone_of(path: Path) -> str:
+    """"makerspace__door.jpg" -> "Makerspace A"; "wet_lab__sign.jpg" -> "Wet Lab"."""
     name = path.stem.lower()
     for key, zone in ZONES.items():
         if key in name:
             return zone
+    if "__" in name:
+        return name.split("__")[0].replace("_", " ").replace("-", " ").title()
     return "Innovation Wing"
 
 
@@ -143,14 +147,30 @@ def describe_photo(path: Path) -> str:
     return f"{whole}\nTEXT IN CLOSE-UPS:\n{signs}"
 
 
+PHOTOS_AT_ONCE = 3      # x 5 calls each = 15 requests in flight
+
+
 def describe_all() -> dict:
     cache = json.loads(CACHE_PATH.read_text(encoding="utf-8")) if CACHE_PATH.exists() else {}
-    for path in photos():
-        if path.name in cache:
-            continue
-        print(f"{path.name} ({zone_of(path)})")
-        cache[path.name] = describe_photo(path)
-        CACHE_PATH.write_text(json.dumps(cache, indent=1, ensure_ascii=False), encoding="utf-8")
+    todo = [p for p in photos() if p.name not in cache]
+    print(f"{len(cache)} photos cached, describing {len(todo)}")
+    lock = threading.Lock()
+
+    def work(path: Path):
+        try:
+            text = describe_photo(path)
+        except Exception as exc:
+            # A quota stop or a dropped VPN: keep what is done, rerun later.
+            print(f"failed: {path.name}: {str(exc)[:150]}")
+            return
+        with lock:
+            cache[path.name] = text
+            CACHE_PATH.write_text(json.dumps(cache, indent=1, ensure_ascii=False),
+                                  encoding="utf-8")
+            print(f"done {path.name} ({zone_of(path)})")
+
+    with ThreadPoolExecutor(max_workers=PHOTOS_AT_ONCE) as pool:
+        list(pool.map(work, todo))
     return cache
 
 
