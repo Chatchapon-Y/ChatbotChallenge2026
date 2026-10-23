@@ -178,6 +178,17 @@ def other_year(question_years: list[str], chunk: dict) -> bool:
     return bool(years) and question_years[0] not in years
 
 
+# build/images.py marks descriptions from the local model (good text,
+# unreliable counts). 3,394 short chunks flooded the results: "What is
+# PLA short for" got 9 of them in 12. They now only fill a slot when no
+# other candidate is left, and come last among a page's images.
+LOCAL = "Rough description by a small local model"
+
+
+def is_local(chunk: dict) -> bool:
+    return LOCAL in chunk["text"]
+
+
 def retrieve(question: str, k: int = None, where: dict = None) -> list[dict]:
     """Return the k chunks most relevant to the question.
 
@@ -209,6 +220,7 @@ def add_page_images(store, question: str, chunks: list[dict], n: int) -> list[di
     images = [im for im in get_bm25(store).images_on(question, urls, n + len(chunks))
               if (im["metadata"]["url"], im["metadata"]["position"]) not in taken
               and not other_year(years, im)]
+    images.sort(key=is_local)
     return chunks + images[:n]
 
 
@@ -220,7 +232,7 @@ def search(store, question: str, k: int, where: dict = None) -> list[dict]:
             ranked = query(store, question, k=n, where=where)
         else:
             ranked = get_bm25(store).search(question, k=n, where=where)
-        return sorted(ranked, key=lambda c: other_year(years, c))[:k]
+        return sorted(ranked, key=lambda c: (other_year(years, c), is_local(c)))[:k]
 
     ranked_lists = [
         query(store, question, k=n, where=where),
@@ -232,8 +244,10 @@ def search(store, question: str, k: int, where: dict = None) -> list[dict]:
             key = (c["metadata"].get("url"), c["metadata"].get("position"))
             scores[key] = scores.get(key, 0) + 1 / (RRF_K + rank + 1)
             chunks.setdefault(key, c)
-    # Chunks about another year go to the back, behind every other candidate.
-    best = sorted(scores, key=lambda key: (other_year(years, chunks[key]), -scores[key]))[:k]
+    # Chunks about another year go to the back, behind every other
+    # candidate; local-model descriptions just before them.
+    best = sorted(scores, key=lambda key: (other_year(years, chunks[key]),
+                                           is_local(chunks[key]), -scores[key]))[:k]
     return [{**chunks[key], "rrf": scores[key]} for key in best]
 
 

@@ -1,0 +1,3 @@
+Describe the colours of this image for a search index. Reply with one line in exactly this form:
+background: <colours>; title/main text: <colours>; other main colours: <colours>; overall: <1-3 colour names>
+Use plain colour names (blue, dark blue, light blue, navy, teal, green, yellow, orange, red, pink, purple, brown, beige, black, grey, white). If the image is a sign, icon or logo, give the colour of the sign itself. Nothing else.

@@ -65,6 +65,7 @@ COLOURS_PATH = Path("data/colours.json")    # written by build/colours.py
 # Kept apart from the gpt-5-mini cache: its text is good but its counts
 # are not (11 people on a poster came back as 4), so its chunks say so.
 LOCAL_PATH = Path("local_vlm/descriptions_local.json")
+LOCAL_COLOURS_PATH = Path("local_vlm/colours_local.json")   # local_vlm/COLOURS_BRIEF.md
 LOCAL_NOTE = "Rough description by a small local model; its counts may be wrong."
 SECTIONS = ("TEXT:", "TYPE:", "PLACE:", "OBJECTS:", "LAYOUT:")
 OCR_MAX_CHARS = 3000
@@ -461,10 +462,17 @@ def index_descriptions(descriptions: dict, images: list[dict], fresh: bool = Fal
     ocr = json.loads(OCR_PATH.read_text(encoding="utf-8")) if OCR_PATH.exists() else {}
     colours = (json.loads(COLOURS_PATH.read_text(encoding="utf-8"))
                if COLOURS_PATH.exists() else {})
+    # Colours from the local model fill only images gpt-5-mini did not colour.
+    if LOCAL_COLOURS_PATH.exists():
+        local_colours = json.loads(LOCAL_COLOURS_PATH.read_text(encoding="utf-8"))
+        colours = {**{k: v for k, v in local_colours.items()
+                      if "background:" in v and "overall:" in v}, **colours}
     local = (json.loads(LOCAL_PATH.read_text(encoding="utf-8"))
              if LOCAL_PATH.exists() else {})
-    # A reply missing a section ran off into repetition; leave it out.
-    local = {k: v for k, v in local.items() if all(label in v for label in SECTIONS)}
+    # 35 of 3,394 replies lost a label, usually TYPE:. One that kept its
+    # TEXT and most sections is still worth indexing; fewer, leave it out.
+    local = {k: v for k, v in local.items()
+             if "TEXT:" in v and sum(label in v for label in SECTIONS) >= 3}
     # Every page a picture appears on, at any size: answer.py reads the
     # images of the pages it retrieved, and a picture is indexed only once.
     shown_on = {}
