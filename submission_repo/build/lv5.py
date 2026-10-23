@@ -12,7 +12,9 @@ rarely says where it is.
 
 Every photo is described twice over: once whole (objects, counts,
 colours, layout) and once as four overlapping quarters, enlarged, for
-the text on signs. A sign that is a few pixels high in the whole photo
+the text on signs. A close-up ("makerspace__door-sign.jpg": sign, poster,
+label, close, notice, board, screen, plate or text after the "__") is
+described whole only. A sign that is a few pixels high in the whole photo
 is lost when the model shrinks it, and is readable in a quarter.
 
 Run from submission_repo on HKU Wi-Fi or HKUVPN:
@@ -27,6 +29,7 @@ import base64
 import hashlib
 import io
 import json
+import re
 import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor
@@ -132,9 +135,14 @@ def ask(path: Path, prompt: str, side: int) -> str:
     return (r.choices[0].message.content or "").strip()
 
 
+# A close-up of one sign or poster is already readable whole; quartering
+# it costs four more calls for nothing. Wide shots of a room keep them.
+CLOSE_UP = re.compile(r"sign|poster|label|close|notice|board|screen|plate|text", re.I)
+
+
 def describe_photo(path: Path) -> str:
     zone = zone_of(path)
-    tiles = quarters(path)
+    tiles = [] if CLOSE_UP.search(path.stem.split("__")[-1]) else quarters(path)
     try:
         with ThreadPoolExecutor(max_workers=5) as pool:
             whole = pool.submit(ask, path, WHOLE_PROMPT.format(zone=zone), WHOLE_SIDE)
