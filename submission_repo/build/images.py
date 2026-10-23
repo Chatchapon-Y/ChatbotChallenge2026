@@ -465,6 +465,11 @@ def index_descriptions(descriptions: dict, images: list[dict], fresh: bool = Fal
              if LOCAL_PATH.exists() else {})
     # A reply missing a section ran off into repetition; leave it out.
     local = {k: v for k, v in local.items() if all(label in v for label in SECTIONS)}
+    # Every page a picture appears on, at any size: answer.py reads the
+    # images of the pages it retrieved, and a picture is indexed only once.
+    shown_on = {}
+    for r in json.loads(Path("data/images.json").read_text(encoding="utf-8")):
+        shown_on.setdefault(SIZE.sub("", r["src"].split("?")[0]), set()).add(r["page"])
     chunks, per_page = {}, {}
     for im in images:
         text, read = descriptions.get(im["src"]), ocr.get(im["src"], "")[:OCR_MAX_CHARS]
@@ -498,6 +503,8 @@ def index_descriptions(descriptions: dict, images: list[dict], fresh: bool = Fal
             "page_type": page.get("page_type", ""),
             "site":      page.get("site", ""),
             "image":     im["src"],
+            "pages":     " ".join(sorted(shown_on.get(SIZE.sub("", im["src"].split("?")[0]),
+                                                  {im["page"]}))),
         })
 
     store = get_store(reset=False)

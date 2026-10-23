@@ -50,8 +50,12 @@ class BM25:
     def images_on(self, question: str, urls: set, k: int) -> list[dict]:
         """The k image descriptions on the given pages that best match the question."""
         scores = self._scores(question)
+        # "pages" lists every page showing the picture: the Wet Lab's
+        # "Trained Members Only" icon is indexed under the Electronic
+        # workbench page, where it appeared first.
         on_pages = [i for i, m in enumerate(self.metas)
-                    if m.get("kind") == "image" and m.get("url") in urls]
+                    if m.get("kind") == "image"
+                    and (m.get("url") in urls or urls & set(m.get("pages", "").split()))]
         best = sorted(on_pages, key=lambda i: scores.get(i, 0), reverse=True)[:k]
         return [{"text": self.docs[i], "metadata": self.metas[i], "score": scores.get(i, 0)}
                 for i in best]

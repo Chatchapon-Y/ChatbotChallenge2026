@@ -32,7 +32,9 @@ If the answer is a web address, give the whole address, not only the site name.
 If the question asks for a colour or colour scheme, name the main colours in
 plain words, e.g. "Blue and white".
 If the question asks for names (teams, people, projects), give every name in
-full as written, separated by semicolons.
+full as written, separated by semicolons. On a poster a team name is often
+followed by a line saying what the project is ("AquaSense", then "Smart Water
+Bottle for Hikers"): give that line with the name.
 If the question names a year, use only context about that year.
 A passage marked "Rough description by a small local model" may have wrong
 counts: for a number, prefer any other passage that gives one.
@@ -93,6 +95,22 @@ CALCULATE = ("This question needs arithmetic. Find every number it needs in the 
              "context, check that each one belongs to the item the question means, "
              "then calculate. Reply with the final answer only: the number and its "
              "unit, no working.")
+# The other trap is a passage that looks like the answer but is about
+# something next to it. "Winning teams in Pitch New Tech Ideas 2025" was
+# answered from a poster for a sharing session *before* the 2025 final,
+# by the 2024 winners, whose text says "Pitch New Tech Ideas 2025". "The
+# first Robot Arm workshop" was answered from a poster reading "WORKSHOP
+# 1" from a later season. gpt-5-mini checks candidates against the
+# question when told to; gpt-4o-mini takes the first good-looking one.
+CAREFUL = re.compile(
+    r"\b(win|wins|won|winner|winners|winning|champions?|first|earliest|latest"
+    r"|most recent|oldest|newest)\b", re.I)
+CHECK = ("Several passages may look like the answer. Check each candidate against "
+         "every detail of the question: the exact event and edition, the year, and "
+         "whether the passage is the result itself or something else about it (a "
+         "sharing session by earlier winners, a promotion poster, a later season). "
+         "If the question asks for the first, earliest or latest, compare the dates "
+         "and choose by them. Reply with the final answer only.")
 REASON_TIMEOUT = 20     # seconds; on timeout gpt-4o-mini answers instead
 
 
@@ -280,10 +298,12 @@ def rag_answer(question: str) -> str:
         {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}"},
     ]
     reply = ""
-    if ARITHMETIC.search(question):
+    note = (CALCULATE if ARITHMETIC.search(question)
+            else CHECK if CAREFUL.search(question) else None)
+    if note:
         reply = reason([
             {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}\n\n{CALCULATE}"},
+            {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}\n\n{note}"},
         ])
     if not reply.strip():
         reply = chat(messages)
