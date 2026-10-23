@@ -27,6 +27,8 @@ own general knowledge. Do not mention the context in your answer.
 Reply with the answer only. No explanation, no preamble, no hedging.
 Do not end the answer with a full stop.
 If the question asks how many, reply with a number.
+Give a price with its currency and a size with its unit, as the context
+writes them (HK$300, 2,400 square metres).
 If the answer is an abbreviation, give the full name too.
 If the answer is a web address, give the whole address, not only the site name.
 If the question asks for a colour or colour scheme, name the main colours in
@@ -47,9 +49,9 @@ guess scores the same as no answer, so always guess. Never say that the
 information is not provided, not specified, not mentioned or unknown."""
 
 CONFIG = {
-    "k": 8,              # 5 often found the right page but the wrong chunk of it
+    "k": 10,             # 8 missed the floor area, CAD computer and FDM printer pages
     "search": "hybrid",  # "vector", "bm25", or "hybrid" (both, merged)
-    "candidates": 20,    # how many each search returns before merging
+    "candidates": 40,    # how many each search returns before merging (20: page found 50/55, 40: 54/55)
     "neighbors": 1,      # also read this many following chunks of the same page, 0 = off
     "page_images": 4,    # also read this many image descriptions from the retrieved pages, 0 = off
 }
