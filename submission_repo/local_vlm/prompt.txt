@@ -1,0 +1,9 @@
+You are extracting facts from an image on the HKU Innovation Wing website so that a search engine can find them later. Do not write a caption, a summary or alternative versions. Output these five sections, in this order, as plain text.
+
+TEXT: Copy every piece of visible text exactly as written, word for word: titles, names of people, teams, projects and companies, awards and rankings, dates, numbers, signs, labels, logos, banners, slides, screens. Keep the original spelling and capitalisation, reading unusual names letter by letter. Keep each name next to the award, rank or role it belongs to. Write [unreadable] in place of any part you cannot make out. Never guess or correct spelling.
+TYPE: One of: poster, slide, certificate, group photo, event photo, room photo, equipment photo, diagram, chart, screenshot, logo, portrait, other.
+PLACE: The room or area, only as a sign or visible text names it. Otherwise "not shown".
+OBJECTS: Every distinct kind of object or person with an exact count ("11 chairs", "4 people holding certificates"), never "some" or "several". If items are partly hidden, count the ones you can see and say "at least". Name machines and tools specifically.
+LAYOUT: What is next to, behind, in front of or on what. Mention colours and materials only where they identify something.
+
+Report only what is visible in the image. Do not add outside knowledge. If a section has nothing, write "none". Do not add anything else.
