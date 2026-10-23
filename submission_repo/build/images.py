@@ -17,6 +17,8 @@ Run from submission_repo, on HKU Wi-Fi or HKUVPN:
                                               (changed chunks keep their old
                                               embedding; add "fresh" to re-embed)
     python -m build.images merge their.json   add a teammate's cached descriptions
+    (local_vlm/descriptions_local.json is NOT merged: index reads it as is,
+    behind the gpt-5-mini descriptions, labelled as rough)
 
 `python -m build.index` wipes data/chroma, image descriptions included.
 Run `python -m build.images index` after it; the cache makes that cheap.
@@ -59,6 +61,12 @@ Report only what is visible in the image. Do not add outside knowledge. If a sec
 CACHE_PATH = Path("data/descriptions.json")
 OCR_PATH = Path("data/ocr.json")            # written by build/ocr.py
 COLOURS_PATH = Path("data/colours.json")    # written by build/colours.py
+# Descriptions from a local model (qwen2.5vl:7b, local_vlm/README.md).
+# Kept apart from the gpt-5-mini cache: its text is good but its counts
+# are not (11 people on a poster came back as 4), so its chunks say so.
+LOCAL_PATH = Path("local_vlm/descriptions_local.json")
+LOCAL_NOTE = "Rough description by a small local model; its counts may be wrong."
+SECTIONS = ("TEXT:", "TYPE:", "PLACE:", "OBJECTS:", "LAYOUT:")
 OCR_MAX_CHARS = 3000
 # An image whose OCR text is at least this long is a poster, slide or
 # certificate: OCR already copied what it says, so it skips the vision
@@ -453,9 +461,15 @@ def index_descriptions(descriptions: dict, images: list[dict], fresh: bool = Fal
     ocr = json.loads(OCR_PATH.read_text(encoding="utf-8")) if OCR_PATH.exists() else {}
     colours = (json.loads(COLOURS_PATH.read_text(encoding="utf-8"))
                if COLOURS_PATH.exists() else {})
+    local = (json.loads(LOCAL_PATH.read_text(encoding="utf-8"))
+             if LOCAL_PATH.exists() else {})
+    # A reply missing a section ran off into repetition; leave it out.
+    local = {k: v for k, v in local.items() if all(label in v for label in SECTIONS)}
     chunks, per_page = {}, {}
     for im in images:
         text, read = descriptions.get(im["src"]), ocr.get(im["src"], "")[:OCR_MAX_CHARS]
+        if not text and local.get(im["src"]):
+            text = LOCAL_NOTE + "\n" + local[im["src"]]
         if not text and not read and not colours.get(im["src"]):
             continue
         page = pages.get(im["page"], {"url": im["page"], "title": "", "text": ""})

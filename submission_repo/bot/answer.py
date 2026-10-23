@@ -34,6 +34,8 @@ plain words, e.g. "Blue and white".
 If the question asks for names (teams, people, projects), give every name in
 full as written, separated by semicolons.
 If the question names a year, use only context about that year.
+A passage marked "Rough description by a small local model" may have wrong
+counts: for a number, prefer any other passage that gives one.
 If the question asks about the first or earliest of a series (first workshop,
 first edition), compare the dates in the context and use the earliest one.
 
