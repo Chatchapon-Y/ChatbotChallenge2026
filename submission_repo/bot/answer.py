@@ -40,6 +40,9 @@ Bottle for Hikers"): give that line with the name.
 If the question names a year, use only context about that year.
 A passage marked "Rough description by a small local model" may have wrong
 counts: for a number, prefer any other passage that gives one.
+A passage marked "Notes written on site by our team, counted by hand" is the
+most reliable source about things inside the building: for a count, colour or
+position there, prefer it over a photo description.
 If the question asks about the first or earliest of a series (first workshop,
 first edition), compare the dates in the context and use the earliest one.
 
@@ -54,6 +57,7 @@ CONFIG = {
     "candidates": 40,    # how many each search returns before merging (20: page found 50/55, 40: 54/55)
     "neighbors": 1,      # also read this many following chunks of the same page, 0 = off
     "page_images": 4,    # also read this many image descriptions from the retrieved pages, 0 = off
+    "photos": 5,         # in-building photos and on-site notes, on top of the k web chunks
 }
 
 # Reciprocal Rank Fusion. A chunk scores 1/(RRF_K + rank) in each list
@@ -210,6 +214,11 @@ def is_local(chunk: dict) -> bool:
     return LOCAL in chunk["text"]
 
 
+def is_photo(chunk: dict) -> bool:
+    """A photo taken inside the building, or the team's on-site notes (build/lv5.py)."""
+    return chunk["metadata"].get("kind") == "photo"
+
+
 def retrieve(question: str, k: int = None, where: dict = None) -> list[dict]:
     """Return the k chunks most relevant to the question.
 
@@ -246,21 +255,44 @@ def add_page_images(store, question: str, chunks: list[dict], n: int) -> list[di
 
 
 def search(store, question: str, k: int, where: dict = None) -> list[dict]:
-    years = list(set(YEAR.findall(question)))
-    n = CONFIG["candidates"]
-    if CONFIG["search"] in ("vector", "bm25"):
-        if CONFIG["search"] == "vector":
-            ranked = query(store, question, k=n, where=where)
-        else:
-            ranked = get_bm25(store).search(question, k=n, where=where)
-        return sorted(ranked, key=lambda c: (other_year(years, c), is_local(c)))[:k]
+    """k chunks from the websites, plus CONFIG["photos"] from the building.
 
-    ranked_lists = [
-        query(store, question, k=n, where=where),
-        get_bm25(store).search(question, k=n, where=where),
-    ]
+    Photos of the building and the team's on-site notes are searched
+    apart: in one shared search they filled the candidate lists for
+    "How many computers are in the Digital Learning Studio?" and pushed
+    the /venue/ page out, and a Lv5 question still needs them.
+    """
+    web = ranked_search(store, question, k, CONFIG["candidates"], where, photos=False)
+    n = CONFIG["photos"] if INSIDE.search(question) else min(CONFIG["photos"], 2)
+    if where is not None or n <= 0:
+        return web
+    return web + ranked_search(store, question, n, PHOTO_CANDIDATES,
+                               {"kind": "photo"}, photos=True)
+
+
+PHOTO_CANDIDATES = 15
+# A question about the building itself names a place in it or a thing you
+# see there. Others get only 2 photo chunks: each is 2-5k characters.
+INSIDE = re.compile(
+    r"makerspace|brainstorm|open event|digital learning|studio|corridor|stair|lobby"
+    r"|entrance|gallery|room|area|wall|floor|door|sign|poster|board|locker|shelf|shelves"
+    r"|chair|stool|seat|bench|table|desk|printer|screen|monitor|projector|computer"
+    r"|colou?r|inside|located|next to|behind|in front of|LG/?F|G/F|IW-", re.I)
+
+
+def ranked_search(store, question: str, k: int, n: int, where: dict | None,
+                  photos: bool) -> list[dict]:
+    years = list(set(YEAR.findall(question)))
+    vector_where = where if photos or where else {"kind": {"$ne": "photo"}}
+    lists = []
+    if CONFIG["search"] in ("vector", "hybrid"):
+        lists.append(query(store, question, k=n, where=vector_where))
+    if CONFIG["search"] in ("bm25", "hybrid"):
+        # BM25 filters on plain equality only, so photos are dropped here.
+        hits = get_bm25(store).search(question, k=n + (0 if photos else 300), where=where)
+        lists.append([c for c in hits if is_photo(c) == photos][:n])
     scores, chunks = {}, {}
-    for ranked in ranked_lists:
+    for ranked in lists:
         for rank, c in enumerate(ranked):
             key = (c["metadata"].get("url"), c["metadata"].get("position"))
             scores[key] = scores.get(key, 0) + 1 / (RRF_K + rank + 1)
@@ -291,9 +323,9 @@ def add_neighbors(store, chunks: list[dict], n: int) -> list[dict]:
     for c in chunks:
         url, pos = c["metadata"].get("url"), c["metadata"].get("position")
         text = c["text"]
-        # An image description is complete on its own; the "next chunk"
-        # would be a different image of the same page.
-        steps = 0 if c["metadata"].get("kind") == "image" else n
+        # An image or photo description is complete on its own; the "next
+        # chunk" would be a different image of the same page or zone.
+        steps = 0 if c["metadata"].get("kind") in ("image", "photo") else n
         for step in range(1, steps + 1):
             key = (url, pos + step)
             if key in taken:

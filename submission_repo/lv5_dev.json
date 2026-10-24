@@ -1,0 +1,188 @@
+[
+ {
+  "level": 5,
+  "question": "How many stools are there in Makerspace A?",
+  "answer": "53",
+  "source": [
+   "innowing-photo://makerspace-a"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "How many tables are there in Makerspace A?",
+  "answer": "10 (9 work tables and 1 table for equipment)",
+  "source": [
+   "innowing-photo://makerspace-a"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "How many projectors are there at the front of Makerspace A?",
+  "answer": "2",
+  "source": [
+   "innowing-photo://makerspace-a"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "How many 3D printers stand on top of the lockers on the right side of Makerspace A, and what colour are they?",
+  "answer": "3, grey",
+  "source": [
+   "innowing-photo://makerspace-a"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "What do the stools in Makerspace A look like?",
+  "answer": "Black steel legs with a round dark brown wooden seat",
+  "source": [
+   "innowing-photo://makerspace-a"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "How many lockers with square white doors are at the front of Makerspace A?",
+  "answer": "56",
+  "source": [
+   "innowing-photo://makerspace-a"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "What colour is the background behind the word ENGINEERING on the sign at the back of the brainstorming area?",
+  "answer": "Light blue",
+  "source": [
+   "innowing-photo://brainstorming-area"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "How many cube seats are there in the brainstorming area?",
+  "answer": "20",
+  "source": [
+   "innowing-photo://brainstorming-area"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "What are the two glass-walled rooms on the left side of the brainstorming area?",
+  "answer": "IW-LG13 Thematic Workshop H and IW-LG14 Dream Chamber",
+  "source": [
+   "innowing-photo://brainstorming-area"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "What is written on the podium in front of the LED wall in the brainstorming area?",
+  "answer": "Tam Wing Fan Innovation Wing, Faculty of Engineering",
+  "source": [
+   "innowing-photo://brainstorming-area"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "What does the orange ATTENTION sign above the sink in the brainstorming area say?",
+  "answer": "Hand-washing only, water disposal only; any improper disposal will damage the drainage system",
+  "source": [
+   "innowing-photo://brainstorming-area"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "How many chairs are there in the Open Event Area?",
+  "answer": "32",
+  "source": [
+   "innowing-photo://open-event-area"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "How many V-shaped tables are there in the Open Event Area?",
+  "answer": "13",
+  "source": [
+   "innowing-photo://open-event-area"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "How many 3D printers are in the Open Event Area, and what colours are they?",
+  "answer": "2: one grey and one black",
+  "source": [
+   "innowing-photo://open-event-area"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "What does the woman drawn on the whiteboard in the Open Event Area say?",
+  "answer": "Welcome to HKU Racing",
+  "source": [
+   "innowing-photo://open-event-area"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "According to the sign in the Open Event Area, which activities are allowed there?",
+  "answer": "Study, group discussion and collaborative learning",
+  "source": [
+   "innowing-photo://open-event-area"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "What does the blue KEEP CLEAN sign in the Open Event Area tell people not to do?",
+  "answer": "Do not rearrange the table set",
+  "source": [
+   "innowing-photo://open-event-area"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "What is the room number of the Digital Learning Studio?",
+  "answer": "IW-LG07",
+  "source": [
+   "innowing-photo://digital-learning-studio"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "How many computer monitors are in the Digital Learning Studio?",
+  "answer": "22",
+  "source": [
+   "innowing-photo://digital-learning-studio"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "What colours are the chairs in the Digital Learning Studio?",
+  "answer": "Black, grey, red, orange and blue",
+  "source": [
+   "innowing-photo://digital-learning-studio"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "What colour is the arrow-shaped Digital Learning Studio sign?",
+  "answer": "Purple with white text",
+  "source": [
+   "innowing-photo://digital-learning-studio",
+   "innowing-photo://lgf-corridors"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "What colour is the Brainstorming Area sign on the stand?",
+  "answer": "Dark blue with white text",
+  "source": [
+   "innowing-photo://brainstorming-area"
+  ]
+ },
+ {
+  "level": 5,
+  "question": "What is the application deadline on the Funding Scheme poster on the staircase between LG/F and G/F?",
+  "answer": "October 30, 2026 (Friday)",
+  "source": [
+   "innowing-photo://staircase-between-lgf-and-gf",
+   "innowing-photo://lgf-corridors"
+  ]
+ }
+]

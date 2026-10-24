@@ -1,0 +1,5 @@
+Brainstorming area, floor seating: coloured cube seats in 3 rows, facing the LED wall. Colours are listed from right to left, looking towards the LED wall.
+Back row: 8 cube seats: red, red, yellow, red, green, red, orange, green.
+Middle row: 7 cube seats: green, yellow, yellow, orange, (empty gap), green, orange, orange.
+Front row: 5 cube seats: green, orange, yellow, yellow, red. The front row continues into the 3 long backless benches (light blue, dark blue, light blue).
+Total: 20 cube seats and 3 long benches.

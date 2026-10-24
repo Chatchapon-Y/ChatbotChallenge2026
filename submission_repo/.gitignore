@@ -11,3 +11,10 @@ venv/
 # output. Do not: the grading machine only has what you commit, and
 # without data/chroma your bot has nothing to retrieve from. Commit it
 # deliberately before you submit.
+
+# Lv5 photos are 1.4 GB; only their notes.txt are committed
+data/lv5_raw/**/*.JPG
+data/lv5_raw/**/*.jpg
+data/lv5_raw/**/*.jpeg
+data/lv5_raw/**/*.png
+data/lv5_raw/**/*_original_*.txt
