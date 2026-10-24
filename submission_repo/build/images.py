@@ -465,7 +465,8 @@ def index_descriptions(descriptions: dict, images: list[dict], fresh: bool = Fal
     # Colours from the local model fill only images gpt-5-mini did not colour.
     if LOCAL_COLOURS_PATH.exists():
         local_colours = json.loads(LOCAL_COLOURS_PATH.read_text(encoding="utf-8"))
-        colours = {**{k: v for k, v in local_colours.items()
+        # The local model writes both "gray" and "grey"; questions say either.
+        colours = {**{k: v.replace("gray", "grey") for k, v in local_colours.items()
                       if "background:" in v and "overall:" in v}, **colours}
     local = (json.loads(LOCAL_PATH.read_text(encoding="utf-8"))
              if LOCAL_PATH.exists() else {})
