@@ -5,7 +5,8 @@
   "answer": "53",
   "source": [
    "innowing-photo://makerspace-a"
-  ]
+  ],
+  "type": "count"
  },
  {
   "level": 5,
@@ -13,7 +14,8 @@
   "answer": "10 (9 work tables and 1 table for equipment)",
   "source": [
    "innowing-photo://makerspace-a"
-  ]
+  ],
+  "type": "count"
  },
  {
   "level": 5,
@@ -21,7 +23,8 @@
   "answer": "2",
   "source": [
    "innowing-photo://makerspace-a"
-  ]
+  ],
+  "type": "count"
  },
  {
   "level": 5,
@@ -29,7 +32,8 @@
   "answer": "3, grey",
   "source": [
    "innowing-photo://makerspace-a"
-  ]
+  ],
+  "type": "count"
  },
  {
   "level": 5,
@@ -37,7 +41,8 @@
   "answer": "Black steel legs with a round dark brown wooden seat",
   "source": [
    "innowing-photo://makerspace-a"
-  ]
+  ],
+  "type": "colour"
  },
  {
   "level": 5,
@@ -45,7 +50,8 @@
   "answer": "56",
   "source": [
    "innowing-photo://makerspace-a"
-  ]
+  ],
+  "type": "count"
  },
  {
   "level": 5,
@@ -53,7 +59,8 @@
   "answer": "Light blue",
   "source": [
    "innowing-photo://brainstorming-area"
-  ]
+  ],
+  "type": "colour"
  },
  {
   "level": 5,
@@ -61,7 +68,8 @@
   "answer": "20",
   "source": [
    "innowing-photo://brainstorming-area"
-  ]
+  ],
+  "type": "count"
  },
  {
   "level": 5,
@@ -69,7 +77,8 @@
   "answer": "IW-LG13 Thematic Workshop H and IW-LG14 Dream Chamber",
   "source": [
    "innowing-photo://brainstorming-area"
-  ]
+  ],
+  "type": "name"
  },
  {
   "level": 5,
@@ -77,7 +86,8 @@
   "answer": "Tam Wing Fan Innovation Wing, Faculty of Engineering",
   "source": [
    "innowing-photo://brainstorming-area"
-  ]
+  ],
+  "type": "text"
  },
  {
   "level": 5,
@@ -85,7 +95,8 @@
   "answer": "Hand-washing only, water disposal only; any improper disposal will damage the drainage system",
   "source": [
    "innowing-photo://brainstorming-area"
-  ]
+  ],
+  "type": "text"
  },
  {
   "level": 5,
@@ -93,7 +104,8 @@
   "answer": "32",
   "source": [
    "innowing-photo://open-event-area"
-  ]
+  ],
+  "type": "count"
  },
  {
   "level": 5,
@@ -101,7 +113,8 @@
   "answer": "13",
   "source": [
    "innowing-photo://open-event-area"
-  ]
+  ],
+  "type": "count"
  },
  {
   "level": 5,
@@ -109,7 +122,8 @@
   "answer": "2: one grey and one black",
   "source": [
    "innowing-photo://open-event-area"
-  ]
+  ],
+  "type": "count"
  },
  {
   "level": 5,
@@ -117,7 +131,8 @@
   "answer": "Welcome to HKU Racing",
   "source": [
    "innowing-photo://open-event-area"
-  ]
+  ],
+  "type": "text"
  },
  {
   "level": 5,
@@ -125,7 +140,8 @@
   "answer": "Study, group discussion and collaborative learning",
   "source": [
    "innowing-photo://open-event-area"
-  ]
+  ],
+  "type": "text"
  },
  {
   "level": 5,
@@ -133,7 +149,8 @@
   "answer": "Do not rearrange the table set",
   "source": [
    "innowing-photo://open-event-area"
-  ]
+  ],
+  "type": "text"
  },
  {
   "level": 5,
@@ -141,7 +158,8 @@
   "answer": "IW-LG07",
   "source": [
    "innowing-photo://digital-learning-studio"
-  ]
+  ],
+  "type": "name"
  },
  {
   "level": 5,
@@ -149,7 +167,8 @@
   "answer": "22",
   "source": [
    "innowing-photo://digital-learning-studio"
-  ]
+  ],
+  "type": "count"
  },
  {
   "level": 5,
@@ -157,7 +176,8 @@
   "answer": "Black, grey, red, orange and blue",
   "source": [
    "innowing-photo://digital-learning-studio"
-  ]
+  ],
+  "type": "colour"
  },
  {
   "level": 5,
@@ -166,7 +186,8 @@
   "source": [
    "innowing-photo://digital-learning-studio",
    "innowing-photo://lgf-corridors"
-  ]
+  ],
+  "type": "colour"
  },
  {
   "level": 5,
@@ -174,7 +195,8 @@
   "answer": "Dark blue with white text",
   "source": [
    "innowing-photo://brainstorming-area"
-  ]
+  ],
+  "type": "colour"
  },
  {
   "level": 5,
@@ -183,6 +205,153 @@
   "source": [
    "innowing-photo://staircase-between-lgf-and-gf",
    "innowing-photo://lgf-corridors"
-  ]
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "Who is listed as the person in charge of Innovation Wing on the health and safety sign of the Digital Learning Studio?",
+  "answer": "Prof. C.K. Chui, Director of Innovation Wing",
+  "source": [
+   "innowing-photo://digital-learning-studio"
+  ],
+  "type": "text-small"
+ },
+ {
+  "level": 5,
+  "question": "What phone number is given for the emergency contact on the Digital Learning Studio's health and safety sign?",
+  "answer": "3910 2390 (Mr. Ryan Chan)",
+  "source": [
+   "innowing-photo://digital-learning-studio"
+  ],
+  "type": "text-small"
+ },
+ {
+  "level": 5,
+  "question": "Where is the fire assembly point on the fire escape route plan in Makerspace A?",
+  "answer": "Top of Sun Yat Sen Steps",
+  "source": [
+   "innowing-photo://makerspace-a"
+  ],
+  "type": "text-small"
+ },
+ {
+  "level": 5,
+  "question": "What capacity does the INNO Induction sign give for the general workbenches in the Makerspace?",
+  "answer": "90",
+  "source": [
+   "innowing-photo://makerspace-a"
+  ],
+  "type": "text-small"
+ },
+ {
+  "level": 5,
+  "question": "According to the notice in the brainstorming area, where should hands-on activities with cutters, glue or model-building go?",
+  "answer": "Makerspace A",
+  "source": [
+   "innowing-photo://brainstorming-area",
+   "innowing-photo://open-event-area"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "What does the notice at the door of the Dream Chamber say about using the room?",
+  "answer": "Booking in advance is required",
+  "source": [
+   "innowing-photo://brainstorming-area"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "What is the name of room IW-LG13?",
+  "answer": "Thematic Workshop H",
+  "source": [
+   "innowing-photo://brainstorming-area"
+  ],
+  "type": "name"
+ },
+ {
+  "level": 5,
+  "question": "How many power sockets are there on the front of the stair step in the brainstorming area?",
+  "answer": "6 (2 on each of the 3 lowest levels, 12 holes)",
+  "source": [
+   "innowing-photo://brainstorming-area"
+  ],
+  "type": "count"
+ },
+ {
+  "level": 5,
+  "question": "Which glass room next to the brainstorming area has a green CHECK POINT sign?",
+  "answer": "IW-LG13 Thematic Workshop H",
+  "source": [
+   "innowing-photo://brainstorming-area"
+  ],
+  "type": "position"
+ },
+ {
+  "level": 5,
+  "question": "What kind of work are the workbenches in the electronic workbench area of Makerspace A for?",
+  "answer": "Electronics work such as soldering and building electric circuits",
+  "source": [
+   "innowing-photo://makerspace-a"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "Which areas are listed on the LG direction sign on the staircase?",
+  "answer": "Brainstorming Area, Open Event Area, Event Hall and Digital Learning Studio",
+  "source": [
+   "innowing-photo://staircase-between-lgf-and-gf",
+   "innowing-photo://lgf-corridors"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "Which student team's poster on the LG/F corridor shows a racing car?",
+  "answer": "HKU Racing",
+  "source": [
+   "innowing-photo://lgf-corridors"
+  ],
+  "type": "poster"
+ },
+ {
+  "level": 5,
+  "question": "What is on the whiteboard next to the 3D printers' corner of the Open Event Area?",
+  "answer": "HKU RACING written in black marker and a drawing of a woman saying WELCOME TO HKU RACING",
+  "source": [
+   "innowing-photo://open-event-area"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "What is on the right side of the brainstorming area when facing the LED wall?",
+  "answer": "No wall; it opens onto the Open Event Area",
+  "source": [
+   "innowing-photo://brainstorming-area"
+  ],
+  "type": "position"
+ },
+ {
+  "level": 5,
+  "question": "What stands on the podium in front of the LED wall in the brainstorming area?",
+  "answer": "1 computer and 1 microphone",
+  "source": [
+   "innowing-photo://brainstorming-area"
+  ],
+  "type": "count"
+ },
+ {
+  "level": 5,
+  "question": "What colour is the Open Event Area sign on the stand?",
+  "answer": "Brown/gold with white text",
+  "source": [
+   "innowing-photo://open-event-area"
+  ],
+  "type": "colour"
  }
 ]

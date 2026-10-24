@@ -42,7 +42,9 @@ A passage marked "Rough description by a small local model" may have wrong
 counts: for a number, prefer any other passage that gives one.
 A passage marked "Notes written on site by our team, counted by hand" is the
 most reliable source about things inside the building: for a count, colour or
-position there, prefer it over a photo description.
+position there, prefer it over a photo description. Several photos often show
+the same room from different sides: never add their counts together; without
+notes, use the largest count seen in one photo.
 If the question asks about the first or earliest of a series (first workshop,
 first edition), compare the dates in the context and use the earliest one.
 
@@ -250,8 +252,28 @@ def add_page_images(store, question: str, chunks: list[dict], n: int) -> list[di
     images = [im for im in get_bm25(store).images_on(question, urls, n + len(chunks))
               if (im["metadata"]["url"], im["metadata"]["position"]) not in taken
               and not other_year(years, im)]
-    images.sort(key=is_local)
+    quoted = quoted_words(question)
+    images.sort(key=lambda im: (not names_quote(im, quoted), is_local(im)))
     return chunks + images[:n]
+
+
+QUOTED = re.compile(r"[\"“”']([^\"“”']{3,60})[\"“”']")
+
+
+def quoted_words(question: str) -> set:
+    """Words of any text the question quotes: 'the sign that says "Trained Members Only"'."""
+    return {w for q in QUOTED.findall(question) for w in tokenize(q) if len(w) >= 4}
+
+
+def names_quote(chunk: dict, words: set) -> bool:
+    """True if the image's file name has a quoted word ("trainedmember.png").
+
+    An icon has no text of its own to match, only its file name, and
+    "members" must match "member", so either word may start the other.
+    """
+    line = next((l for l in chunk["text"].splitlines() if l.startswith("File name:")), "")
+    names = [w for w in tokenize(line[10:]) if len(w) >= 4]
+    return any(a.startswith(b) or b.startswith(a) for a in words for b in names)
 
 
 def search(store, question: str, k: int, where: dict = None) -> list[dict]:

@@ -57,6 +57,12 @@ TILE_SIDE = 1536        # longest side sent for each quarter
 OVERLAP = 0.15          # quarters overlap so text on a cut line is whole in one
 PHOTO_POSITION = 200_000    # images.py uses 100_000+, text chunks 0+
 NOTES_POSITION = 300_000
+# Extra passes over the same photos by the local model machine
+# (local_vlm/LV5_BRIEF.md): exact OCR text at full resolution, and one
+# description per poster on a wall of posters. Both optional.
+LOCAL_OCR = Path("local_vlm/lv5_ocr_local.json")
+LOCAL_POSTERS = Path("local_vlm/lv5_posters_local.json")
+OCR_MAX = 2500          # characters of OCR text kept per photo
 
 # Filename keyword -> the zone's name as the organisers write it.
 ZONES = {
@@ -270,11 +276,19 @@ def index_photos(cache: dict) -> None:
         ids.append(id_)
 
     keys = set(photos())
+    ocr = json.loads(LOCAL_OCR.read_text(encoding="utf-8")) if LOCAL_OCR.exists() else {}
+    posters = (json.loads(LOCAL_POSTERS.read_text(encoding="utf-8"))
+               if LOCAL_POSTERS.exists() else {})
     for n, (key, text) in enumerate(sorted(cache.items())):
         if key in MISFILED or ("/" in key and key not in keys):
             continue
         zone, spot = zone_of(key), spot_of(key)
         where = f"in the {zone}" + (f", {spot}" if spot else "")
+        if posters.get(key):
+            text += ("\nPOSTER BY POSTER (rough notes by a small local model):\n"
+                     + "\n".join(posters[key]))
+        if ocr.get(key):
+            text += "\nTEXT READ BY OCR (exact letters, in no particular order):\n" + ocr[key][:OCR_MAX]
         add(f"Photo taken inside the Tam Wing Fan Innovation Wing, {where}.\n{text}",
             zone, f"{zone} (photo)", PHOTO_POSITION + n, key,
             "photo_" + hashlib.md5(key.encode()).hexdigest())
