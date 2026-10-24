@@ -115,6 +115,25 @@ CHECK = ("Several passages may look like the answer. Check each candidate agains
          "and choose by them. Reply with the final answer only.")
 REASON_TIMEOUT = 20     # seconds; on timeout gpt-4o-mini answers instead
 
+# A calculation names two things, and one embedding of the whole question
+# lands between them (Workshop 2, block 4): "How much larger is the open
+# event area than the Digital Learning Studio?" found the studio's 55 m²
+# but not the open event area's 66 m² on the same page. Each part is
+# searched on its own as well.
+SPLIT = ("List the separate facts needed to answer this question, one short "
+         "search query per line, at most 3 lines, nothing else.")
+PART_K = 4              # chunks added per part
+
+
+def parts_of(question: str) -> list[str]:
+    try:
+        reply = chat([{"role": "system", "content": SPLIT},
+                      {"role": "user", "content": question}], max_tokens=80)
+    except Exception:
+        return []
+    lines = [re.sub(r"^\s*(\d+[.)]|[-*•])\s*", "", line).strip() for line in reply.splitlines()]
+    return [line for line in lines if len(line) > 3][:3]
+
 
 def reason(messages: list[dict]) -> str:
     """One gpt-5-mini call. Returns "" on any failure so the caller can fall back."""
@@ -300,10 +319,15 @@ def rag_answer(question: str) -> str:
         return counted
 
     chunks = retrieve(question)
-
-    # TODO [W2 b4] once this works: decompose compound questions,
-    # TODO retrieve wide then filter, or filter by metadata before
-    # TODO searching.
+    if ARITHMETIC.search(question):
+        store = get_store()
+        taken = {(c["metadata"].get("url"), c["metadata"].get("position")) for c in chunks}
+        for part in parts_of(question):
+            for c in add_neighbors(store, search(store, part, PART_K), CONFIG["neighbors"]):
+                key = (c["metadata"].get("url"), c["metadata"].get("position"))
+                if key not in taken:
+                    taken.add(key)
+                    chunks.append(c)
 
     context = "\n\n".join(
         f"[{c['metadata'].get('url', '?')}]\n{c['text']}" for c in chunks
