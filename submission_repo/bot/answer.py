@@ -59,7 +59,7 @@ CONFIG = {
     "candidates": 40,    # how many each search returns before merging (20: page found 50/55, 40: 54/55)
     "neighbors": 1,      # also read this many following chunks of the same page, 0 = off
     "page_images": 4,    # also read this many image descriptions from the retrieved pages, 0 = off
-    "photos": 5,         # in-building photos and on-site notes, on top of the k web chunks
+    "photos": 8,         # in-building photos and on-site notes, on top of the k web chunks
 }
 
 # Reciprocal Rank Fusion. A chunk scores 1/(RRF_K + rank) in each list
@@ -75,7 +75,7 @@ REFUSAL = re.compile(
     r"|does not (contain|provide|mention|specify|include)"
     r"|no (information|mention|details)"
     r"|cannot (be determined|determine|find)"
-    r"|\bunknown\b|i don.?t know|i do not know|not sure",
+    r"|\bunknown\b|\bunreadable\b|i don.?t know|i do not know|not sure",
     re.I)
 # gpt-4o-mini sometimes restates the question despite the prompt: "The
 # winning teams in Pitch New Tech Ideas in 2025 were SmartSocks, ...".
@@ -120,6 +120,17 @@ CHECK = ("Several passages may look like the answer. Check each candidate agains
          "If the question asks for the first, earliest or latest, compare the dates "
          "and choose by them. Reply with the final answer only.")
 REASON_TIMEOUT = 20     # seconds; on timeout gpt-4o-mini answers instead
+
+# Questions about the building go to gpt-5-mini too. With photos of one
+# room from several sides, gpt-4o-mini mixed them up: the colour of the
+# letters for the colour of the background behind ENGINEERING, the
+# CHECK POINT sign on IW-LG13's door for IW-LG14's.
+INSIDE_CHECK = ("Some passages are photos taken inside the building and notes our "
+                "team wrote on site. Use only the ones about exactly the place and "
+                "object the question names (check the zone and spot each photo was "
+                "taken at). For a colour, keep the colour of letters apart from the "
+                "colour of the background. Prefer the on-site notes for counts. "
+                "Reply with the final answer only.")
 
 # A calculation names two things, and one embedding of the whole question
 # lands between them (Workshop 2, block 4): "How much larger is the open
@@ -292,7 +303,7 @@ def search(store, question: str, k: int, where: dict = None) -> list[dict]:
                                {"kind": "photo"}, photos=True)
 
 
-PHOTO_CANDIDATES = 15
+PHOTO_CANDIDATES = 30   # 15 missed the stair-step notes behind "ENGINEERING"
 # A question about the building itself names a place in it or a thing you
 # see there. Others get only 2 photo chunks: each is 2-5k characters.
 INSIDE = re.compile(
@@ -393,7 +404,8 @@ def rag_answer(question: str) -> str:
     ]
     reply = ""
     note = (CALCULATE if ARITHMETIC.search(question)
-            else CHECK if CAREFUL.search(question) else None)
+            else CHECK if CAREFUL.search(question)
+            else INSIDE_CHECK if INSIDE.search(question) else None)
     if note:
         reply = reason([
             {"role": "system", "content": SYSTEM_PROMPT},

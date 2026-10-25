@@ -60,8 +60,8 @@ NOTES_POSITION = 300_000
 # Extra passes over the same photos by the local model machine
 # (local_vlm/LV5_BRIEF.md): exact OCR text at full resolution, and one
 # description per poster on a wall of posters. Both optional.
-LOCAL_OCR = Path("local_vlm/lv5_ocr_local.json")
-LOCAL_POSTERS = Path("local_vlm/lv5_posters_local.json")
+LOCAL_OCR = Path("local_vlm/lv5/lv5_ocr_local.json")
+LOCAL_POSTERS = Path("local_vlm/lv5/lv5_posters_local.json")
 OCR_MAX = 2500          # characters of OCR text kept per photo
 
 # Filename keyword -> the zone's name as the organisers write it.
@@ -129,7 +129,9 @@ def spot_of(key: str) -> str:
     parts = key.split("/")
     if len(parts) < 3:
         return ""
-    return re.sub(r"^\d+_", "", parts[1]).replace("_", " ").replace("-", " ")
+    spot = re.sub(r"^\d+_", "", parts[1]).replace("_", " ")
+    # "left iw-lg13 thematic workshop h" -> "left IW-LG13 thematic workshop h"
+    return re.sub(r"\biw-lg(\d+)", lambda m: "IW-LG" + m.group(1), spot)
 
 
 def photos() -> dict[str, Path]:
@@ -287,8 +289,11 @@ def index_photos(cache: dict) -> None:
         if posters.get(key):
             text += ("\nPOSTER BY POSTER (rough notes by a small local model):\n"
                      + "\n".join(posters[key]))
-        if ocr.get(key):
-            text += "\nTEXT READ BY OCR (exact letters, in no particular order):\n" + ocr[key][:OCR_MAX]
+        # Two-letter OCR scraps ("ML", "PD") only add noise.
+        lines = [line for line in ocr.get(key, "").splitlines() if len(line.strip()) >= 3]
+        if lines:
+            text += ("\nTEXT READ BY OCR (exact letters, in no particular order):\n"
+                     + "\n".join(lines)[:OCR_MAX])
         add(f"Photo taken inside the Tam Wing Fan Innovation Wing, {where}.\n{text}",
             zone, f"{zone} (photo)", PHOTO_POSITION + n, key,
             "photo_" + hashlib.md5(key.encode()).hexdigest())
