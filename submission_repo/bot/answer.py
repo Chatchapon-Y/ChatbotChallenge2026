@@ -227,6 +227,17 @@ def is_local(chunk: dict) -> bool:
     return LOCAL in chunk["text"]
 
 
+# A website image description puts its text first and its layout last;
+# past this many characters it is mostly layout, and every question pays
+# for it in tokens. Building photos are not cut: their OCR comes last.
+IMAGE_CHARS = 3000
+
+
+def clip(chunk: dict) -> str:
+    text = chunk["text"]
+    return text[:IMAGE_CHARS] if chunk["metadata"].get("kind") == "image" else text
+
+
 def is_photo(chunk: dict) -> bool:
     """A photo taken inside the building, or the team's on-site notes (build/lv5.py)."""
     return chunk["metadata"].get("kind") == "photo"
@@ -395,7 +406,7 @@ def rag_answer(question: str) -> str:
                     chunks.append(c)
 
     context = "\n\n".join(
-        f"[{c['metadata'].get('url', '?')}]\n{c['text']}" for c in chunks
+        f"[{c['metadata'].get('url', '?')}]\n{clip(c)}" for c in chunks
     )
 
     messages = [
