@@ -10,7 +10,10 @@ import json
 
 from bot.llm import CHAT_DEPLOYMENT, CHAT_URL, _client
 
-raw = _client(CHAT_URL).chat.completions.with_raw_response.create(
-    model=CHAT_DEPLOYMENT, max_tokens=1, messages=[{"role": "user", "content": "hi"}])
+try:
+    raw = _client(CHAT_URL).chat.completions.with_raw_response.create(
+        model=CHAT_DEPLOYMENT, max_tokens=1, messages=[{"role": "user", "content": "hi"}])
+except Exception as exc:        # 403 "Token quota is exceeded. Try again in ..."
+    raise SystemExit(f"no quota left: {str(exc)[-90:]}")
 left = json.loads(raw.text).get("remaining_quota_tokens")
 print(f"remaining quota: {left:,} tokens" if left is not None else raw.headers.get("remaining-quota"))
