@@ -119,7 +119,7 @@ CHECK = ("Several passages may look like the answer. Check each candidate agains
          "sharing session by earlier winners, a promotion poster, a later season). "
          "If the question asks for the first, earliest or latest, compare the dates "
          "and choose by them. Reply with the final answer only.")
-REASON_TIMEOUT = 20     # seconds; on timeout gpt-4o-mini answers instead
+REASON_TIMEOUT = 15     # seconds; on timeout gpt-4o-mini answers instead (startup ~6 s + search ~3 s + this < 30 s)
 
 # Questions about the building go to gpt-5-mini too. With photos of one
 # room from several sides, gpt-4o-mini mixed them up: the colour of the
