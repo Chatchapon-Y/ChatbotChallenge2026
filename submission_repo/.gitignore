@@ -18,3 +18,8 @@ data/lv5_raw/**/*.jpg
 data/lv5_raw/**/*.jpeg
 data/lv5_raw/**/*.png
 data/lv5_raw/**/*_original_*.txt
+
+# Our copy of the photos (same 1.4 GB, other folder name): never committed
+data/lv5_photos/
+# Built from data/lv5_raw notes by `python -m build.facts`; rebuild, do not commit
+data/facts_lv5.json

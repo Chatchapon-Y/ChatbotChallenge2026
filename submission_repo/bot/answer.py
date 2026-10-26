@@ -8,6 +8,7 @@ import json
 import re
 from pathlib import Path
 
+from bot import lv4
 from bot.bm25 import get_bm25, tokenize
 from bot.llm import VISION_DEPLOYMENT, VISION_URL, _client, chat
 from bot.store import get_store, query
@@ -89,20 +90,10 @@ SHORTEN = ("Rewrite your reply as the answer only: just the name, number, date "
 GUESS_AGAIN = ("Do not say the information is missing. Give your single "
                "best guess. Reply with the answer only.")
 
-# gpt-4o-mini finds the right numbers and then gets the sum wrong: "15
-# workbenches with 6 seats each" -> 66, "66 vs 55 square metres, how
-# much larger" -> 55. Questions worded like a calculation go to
+# Counting, arithmetic, comparing and two-part questions (Lv4) go to
+# bot/lv4.py: fact sheets, a search per part, and an instruction for
 # gpt-5-mini, which reasons before it answers. Everything else stays on
 # gpt-4o-mini, which is faster.
-ARITHMETIC = re.compile(
-    r"\bhow (many|much) (more|fewer|less|larger|bigger|smaller|longer|shorter|higher|lower)\b"
-    r"|\bdifference\b|\bcombined\b|\bin total\b|\baltogether\b|\bsum of\b"
-    r"|\btotal (number|amount|cost|area|prize)\b|\bdays (were there )?between\b",
-    re.I)
-CALCULATE = ("This question needs arithmetic. Find every number it needs in the "
-             "context, check that each one belongs to the item the question means, "
-             "then calculate. Reply with the final answer only: the number and its "
-             "unit, no working.")
 # The other trap is a passage that looks like the answer but is about
 # something next to it. "Winning teams in Pitch New Tech Ideas 2025" was
 # answered from a poster for a sharing session *before* the 2025 final,
@@ -125,31 +116,22 @@ REASON_TIMEOUT = 15     # seconds; on timeout gpt-4o-mini answers instead (start
 # room from several sides, gpt-4o-mini mixed them up: the colour of the
 # letters for the colour of the background behind ENGINEERING, the
 # CHECK POINT sign on IW-LG13's door for IW-LG14's.
-INSIDE_CHECK = ("Some passages are photos taken inside the building and notes our "
+INSIDE_RULES = ("Some passages are photos taken inside the building and notes our "
                 "team wrote on site. Use only the ones about exactly the place and "
                 "object the question names (check the zone and spot each photo was "
                 "taken at). For a colour, keep the colour of letters apart from the "
-                "colour of the background. Prefer the on-site notes for counts. "
-                "Reply with the final answer only.")
+                "colour of the background. Prefer the on-site notes for counts.")
+INSIDE_CHECK = INSIDE_RULES + " Reply with the final answer only."
+# "How many chairs are there in Makerspace A?" is a count, but of things
+# in a room: photos and on-site notes, which INSIDE_CHECK handles (also
+# "How many 3D printers are in the Open Event Area, and what colours?").
+# Lv4 keeps a room question only to add or compare across places.
+ZONE = re.compile(r"makerspace a\b|brainstorm|open event|digital learning|corridor"
+                  r"|stair|lobby|gallery|IW-?LG", re.I)
 
-# A calculation names two things, and one embedding of the whole question
-# lands between them (Workshop 2, block 4): "How much larger is the open
-# event area than the Digital Learning Studio?" found the studio's 55 m²
-# but not the open event area's 66 m² on the same page. Each part is
-# searched on its own as well.
-SPLIT = ("List the separate facts needed to answer this question, one short "
-         "search query per line, at most 3 lines, nothing else.")
-PART_K = 4              # chunks added per part
-
-
-def parts_of(question: str) -> list[str]:
-    try:
-        reply = chat([{"role": "system", "content": SPLIT},
-                      {"role": "user", "content": question}], max_tokens=80)
-    except Exception:
-        return []
-    lines = [re.sub(r"^\s*(\d+[.)]|[-*•])\s*", "", line).strip() for line in reply.splitlines()]
-    return [line for line in lines if len(line) > 3][:3]
+# The route and context of the last answer, for eval_dev.py: a Lv4
+# question's context is not what retrieve() alone returns.
+LAST = {"route": None, "chunks": []}
 
 
 def reason(messages: list[dict]) -> str:
@@ -394,20 +376,27 @@ def rag_answer(question: str) -> str:
     Runs once per question with a 30 second budget. Anything expensive
     belongs in build/, not here.
     """
+    LAST.update(route=None, chunks=[])
     counted = counted_answer(question)
     if counted is not None:
         return counted
 
-    chunks = retrieve(question)
-    if ARITHMETIC.search(question):
-        store = get_store()
-        taken = {(c["metadata"].get("url"), c["metadata"].get("position")) for c in chunks}
-        for part in parts_of(question):
-            for c in add_neighbors(store, search(store, part, PART_K), CONFIG["neighbors"]):
-                key = (c["metadata"].get("url"), c["metadata"].get("position"))
-                if key not in taken:
-                    taken.add(key)
-                    chunks.append(c)
+    kind = lv4.route(question)
+    if kind in ("count", "multi") and ZONE.search(question):
+        kind = None
+    if kind:
+        chunks = lv4.gather(question, kind, retrieve)
+        note = lv4.NOTES[kind]
+        if ZONE.search(question):
+            # "3D printers in Makerspace A and the Open Event Area
+            # altogether" answered 8 from web pages and photos; the notes
+            # say 3 + 2.
+            note = INSIDE_RULES + " " + note
+    else:
+        chunks = retrieve(question)
+        note = (CHECK if CAREFUL.search(question)
+                else INSIDE_CHECK if INSIDE.search(question) else None)
+    LAST.update(route=kind, chunks=chunks)
 
     context = "\n\n".join(
         f"[{c['metadata'].get('url', '?')}]\n{clip(c)}" for c in chunks
@@ -417,15 +406,17 @@ def rag_answer(question: str) -> str:
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}"},
     ]
-    reply = ""
-    note = (CALCULATE if ARITHMETIC.search(question)
-            else CHECK if CAREFUL.search(question)
-            else INSIDE_CHECK if INSIDE.search(question) else None)
-    if note:
-        reply = reason([
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}\n\n{note}"},
-        ])
+    with_note = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}\n\n{note}"},
+    ]
+    reply = reason(with_note) if note else ""
+    if not reply.strip() and kind:
+        # gpt-5-mini timed out or failed: gpt-4o-mini follows the same
+        # list-then-ANSWER instruction, less reliably but in ~2 seconds.
+        reply = chat(with_note, max_tokens=1500)
+    if kind:
+        reply = lv4.final_answer(reply)
     if not reply.strip():
         reply = chat(messages)
 

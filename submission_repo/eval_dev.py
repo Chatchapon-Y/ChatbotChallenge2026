@@ -21,7 +21,7 @@ import re
 import sys
 import time
 
-from bot.answer import CONFIG, rag_answer, retrieve
+from bot.answer import CONFIG, LAST, rag_answer, retrieve
 
 
 def normalise(s: str) -> str:
@@ -53,25 +53,37 @@ def run_eval(path: str) -> None:
     found_count, match_count, slowest = 0, 0, 0.0
     for d in dev:
         start = time.time()
-        reply = rag_answer(d["question"])
+        try:
+            reply = rag_answer(d["question"])
+        except Exception as exc:
+            # The team key is shared; a 403 "quota is exceeded" stops
+            # every call until it resets, so stop here, readably.
+            if "quota is exceeded" in str(exc):
+                sys.exit(f"STOPPED at: {d['question']}\n{str(exc)[-120:]}")
+            raise
         seconds = time.time() - start
         slowest = max(slowest, seconds)
 
-        chunks = retrieve(d["question"])
+        # The context rag_answer really used (a Lv4 question's is wider
+        # than retrieve() alone); empty when the poster table answered.
+        chunks = LAST["chunks"] if LAST["chunks"] else retrieve(d["question"])
+        LAST["chunks"] = []
         found = answer_present(d["answer"], " ".join(c["text"] for c in chunks))
         match = answer_present(d["answer"], reply)
         found_count += found
         match_count += match
 
         print(f"Lv{d['level']} | {seconds:4.1f}s | retrieval {'FOUND  ' if found else 'missing'} "
-              f"| bot {'MATCH' if match else 'wrong'} | {d['question']}")
+              f"| bot {'MATCH' if match else 'wrong'} | route {LAST['route'] or '-'} "
+              f"| {d['question']}")
         print(f"    bot:      {reply}")
         print(f"    expected: {d['answer']}")
         urls = sorted({short_url(c['metadata'].get('url', '?')) for c in chunks})
         print(f"    top urls: {', '.join(urls)}")
-        if "source" in d:
-            hit = "yes" if short_url(d["source"]) in urls else "NO"
-            print(f"    source:   {short_url(d['source'])}   in top urls: {hit}")
+        sources = d.get("source") or []
+        for source in [sources] if isinstance(sources, str) else sources:
+            hit = "yes" if short_url(source) in urls else "NO"
+            print(f"    source:   {short_url(source)}   in top urls: {hit}")
         print()
 
     print(f"retrieval FOUND {found_count}/{len(dev)}   bot MATCH {match_count}/{len(dev)}   "

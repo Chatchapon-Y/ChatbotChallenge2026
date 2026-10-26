@@ -1,0 +1,422 @@
+[
+ {
+  "level": 4,
+  "type": "count",
+  "question": "How many 3D printers does the Centre run in total?",
+  "answer": "7",
+  "working": "organisers' dev_set; likely the 7 models on both equipment pages",
+  "source": [
+   "https://innowings.engg.hku.hk/innowing1/equipment/",
+   "https://innoacademy.engg.hku.hk/equipment/"
+  ],
+  "verified": true,
+  "by": "organisers"
+ },
+ {
+  "level": 4,
+  "type": "count",
+  "question": "How many workshop posters are on the Innovation Academy websites for 2025?",
+  "answer": "31",
+  "working": "organisers' dev_set",
+  "source": [
+   "https://innoacademy.engg.hku.hk/workshop/"
+  ],
+  "verified": true,
+  "by": "organisers"
+ },
+ {
+  "level": 4,
+  "type": "arithmetic",
+  "question": "How many seats are there in total at the workbenches of Makerspace assembling areas 1 and 2 combined?",
+  "answer": "90",
+  "working": "15 workbenches x 6 seats (area 1 has 10)",
+  "source": [
+   "https://innoacademy.engg.hku.hk/venue/"
+  ],
+  "verified": true,
+  "by": "teammate-my_dev"
+ },
+ {
+  "level": 4,
+  "type": "arithmetic",
+  "question": "What is the combined floor area of Event Hall A and Event Hall B?",
+  "answer": "186 square metres",
+  "working": "",
+  "source": [
+   "https://innoacademy.engg.hku.hk/venue/"
+  ],
+  "verified": false,
+  "by": "teammate-my_dev"
+ },
+ {
+  "level": 4,
+  "type": "arithmetic",
+  "question": "How much larger is the open event area than the Digital Learning Studio?",
+  "answer": "11 square metres",
+  "working": "66 vs 55",
+  "source": [
+   "https://innoacademy.engg.hku.hk/venue/"
+  ],
+  "verified": false,
+  "by": "teammate-my_dev"
+ },
+ {
+  "level": 4,
+  "type": "arithmetic",
+  "question": "How much more would a student expect to pay out of pocket for the October 2025 UK study tour than for the March 2025 Singapore study tour?",
+  "answer": "HK$4,500",
+  "working": "HK$7,500 vs HK$3,000 (checked in pages_clean)",
+  "source": [
+   "https://innoacademy.engg.hku.hk/studytour/studytourukoct2025/",
+   "https://innoacademy.engg.hku.hk/studytour/sintour2025/"
+  ],
+  "verified": true,
+  "by": "teammate-my_dev"
+ },
+ {
+  "level": 4,
+  "type": "arithmetic",
+  "question": "How many days were there between the application deadline and the show day of the 11th Engineering Inno Show?",
+  "answer": "12 days",
+  "working": "Apr 17 to Apr 29, 2026 (checked)",
+  "source": [
+   "https://innoacademy.engg.hku.hk/innoshow11/"
+  ],
+  "verified": true,
+  "by": "teammate-my_dev"
+ },
+ {
+  "level": 4,
+  "type": "compare",
+  "question": "How many more proposals were shortlisted for Pitch New Tech Ideas 2024 than for 2026?",
+  "answer": "1",
+  "working": "2024: 7 names listed under 'Shortlisted Projects' (must COUNT them; the page also has a stale '5 proposals ... 2022' block). 2026: '6 proposals are shortlisted'",
+  "source": [
+   "https://innoacademy.engg.hku.hk/pitching_2024/",
+   "https://innoacademy.engg.hku.hk/pitching_2026/"
+  ],
+  "verified": true,
+  "by": "teammate-my_dev"
+ },
+ {
+  "level": 4,
+  "type": "two-part",
+  "question": "Which winners of Pitch New Tech Ideas 2024 later spoke at the February 2025 winners' sharing session?",
+  "answer": "Float and NeuroHarbor",
+  "working": "intersection of two lists",
+  "source": [
+   "https://innoacademy.engg.hku.hk/pitching_2024/",
+   "https://innoacademy.engg.hku.hk/workshop/"
+  ],
+  "verified": false,
+  "by": "teammate-my_dev"
+ },
+ {
+  "level": 4,
+  "type": "two-part",
+  "question": "How many Bambu Lab FDM printer models does Innovation Wing list, and which one has the largest build volume?",
+  "answer": "3 models; the Bambu Lab H2D (350 x 320 x 325 mm)",
+  "working": "P1S, X1C, H2D (checked)",
+  "source": [
+   "https://innowings.engg.hku.hk/innowing1/equipment/"
+  ],
+  "verified": true,
+  "by": "teammate-my_dev"
+ },
+ {
+  "level": 4,
+  "type": "count",
+  "question": "How many motion capture workshops at Innovation Wing featured Prof. Terence Leung as the speaker?",
+  "answer": "3",
+  "working": "14 Nov 2025, 6 Mar 2026, 30 Sep 2026 (3 workshop pages name him)",
+  "source": [
+   "https://innoacademy.engg.hku.hk/20251114_motioncapture/",
+   "https://innoacademy.engg.hku.hk/20260306_motioncapture/",
+   "https://innoacademy.engg.hku.hk/20260930_motion/"
+  ],
+  "verified": true,
+  "by": "teammate-my_dev"
+ },
+ {
+  "level": 4,
+  "type": "arithmetic",
+  "question": "If Pitch New Tech Ideas 2026 picks the maximum number of winners, how much prize money is paid out in total?",
+  "answer": "HK$3,600",
+  "working": "3 x HK$1,200; compare our Best-Presenter version (HK$4,600)",
+  "source": [
+   "https://innoacademy.engg.hku.hk/pitching_2026/"
+  ],
+  "verified": true,
+  "by": "teammate-my_dev"
+ },
+ {
+  "level": 4,
+  "type": "count",
+  "question": "How many different 3D printer models are listed on the Innovation Wing and Innovation Academy equipment pages?",
+  "answer": "7",
+  "working": "IW1: Bambu Lab P1S, X1C, H2D, Formlabs Form4 (SLA), MicroArch S240; Innovation Academy: Ultimaker 3 Extended, Raise3D Pro2+. Probably where the dev set's '7 3D printers' comes from",
+  "source": [
+   "https://innowings.engg.hku.hk/innowing1/equipment/",
+   "https://innoacademy.engg.hku.hk/equipment/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "count",
+  "question": "How many items are in the list of equipment and facilities on the Innovation Academy equipment page?",
+  "answer": "6",
+  "working": "Ultimaker 3 Extended, Raise 3D Pro 2+, acrylic laser cutter, metal laser cutter, electronic workbenches, low-risk hand power tools",
+  "source": [
+   "https://innoacademy.engg.hku.hk/equipment/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "count",
+  "question": "How many themes could students choose from for Pitch New Tech Ideas 2026?",
+  "answer": "3",
+  "working": "Human-AI Collaboration; Water Sustainability; Design for an Aging Population",
+  "source": [
+   "https://innoacademy.engg.hku.hk/pitching_2026/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "count",
+  "question": "How many workshop posters are on the Innovation Academy websites for 2024?",
+  "answer": "23",
+  "working": "data/poster_counts.json from teammate's build/counts.py; count by eye under 'Year 2024' on /workshop/",
+  "source": [
+   "https://innoacademy.engg.hku.hk/workshop/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "count",
+  "question": "How many 3D printers are there in Makerspace A?",
+  "answer": "3",
+  "working": "lv5 notes: 3 grey 3D printers on top of lockers, right side",
+  "source": [
+   "lv5_photos/makerspace_a/notes.txt"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "count",
+  "question": "How many cube seats are there in the Brainstorming area?",
+  "answer": "20",
+  "working": "lv5 notes: back 8 + middle 7 + front 5",
+  "source": [
+   "lv5_photos/brainstorming/cube_seats_and_benches/notes.txt"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "count",
+  "question": "How many computer monitors are there in the Digital Learning Studio?",
+  "answer": "22",
+  "working": "lv5 notes: 5 + 6 + 1 + 4 + 6. The website says 20 computers incl. instructor's: photos and website disagree",
+  "source": [
+   "lv5_photos/digital_learning_studio/notes.txt"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "arithmetic",
+  "question": "What is the total cash prize money for Pitch New Tech Ideas 2026 if the maximum number of winners is selected, including the Best Presenter award?",
+  "answer": "HK$4,600",
+  "working": "3 x HK$1,200 + HK$1,000",
+  "source": [
+   "https://innoacademy.engg.hku.hk/pitching_2026/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "arithmetic",
+  "question": "How many hours per week is the Innovation Wing open for members?",
+  "answer": "64 hours",
+  "working": "innowings membership: Mon-Fri 9am-9pm (12 x 5 = 60) + Sat 9am-1pm (4). TRAP: innoacademy membership page says Mon-Fri 9:30-9:00, Sat 9:30-5:00 = 65; the grader's answer is unknown",
+  "source": [
+   "https://innowings.engg.hku.hk/innowing1/membership/",
+   "https://innoacademy.engg.hku.hk/membership/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "arithmetic",
+  "question": "How many days were there between the proposal deadline and the pitching contest of Pitch New Tech Ideas 2024?",
+  "answer": "35 days",
+  "working": "Jan 31, 2024 to Mar 6, 2024 (2024 is a leap year: 29 days in February)",
+  "source": [
+   "https://innoacademy.engg.hku.hk/pitching_2024/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "arithmetic",
+  "question": "How many chairs are there in the Open Event Area and Makerspace A combined?",
+  "answer": "85",
+  "working": "lv5 notes: 32 + 53",
+  "source": [
+   "lv5_photos/open_event_area/notes.txt",
+   "lv5_photos/makerspace_a/notes.txt"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "arithmetic",
+  "question": "How many 3D printers are there in Makerspace A and the Open Event Area altogether?",
+  "answer": "5",
+  "working": "lv5 notes: 3 + 2",
+  "source": [
+   "lv5_photos/makerspace_a/notes.txt",
+   "lv5_photos/open_event_area/01_closeup/notes.txt"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "arithmetic",
+  "question": "During opening hours, how many tutors and technicians in total are on duty in the Innovation Wing?",
+  "answer": "9",
+  "working": "5 tutors (/tutor/) + 4 technicians (/staff/)",
+  "source": [
+   "https://innowings.engg.hku.hk/tutor/",
+   "https://innowings.engg.hku.hk/staff/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "arithmetic",
+  "question": "How many of the high performance computers in the Digital Learning Studio are for students, not the instructor?",
+  "answer": "19",
+  "working": "website: 20 computers including the instructor's",
+  "source": [
+   "https://innowings.engg.hku.hk/innowing1/equipment/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "compare",
+  "question": "Which year had more workshop posters on the Innovation Academy website, 2024 or 2026?",
+  "answer": "2024",
+  "working": "23 vs 14 (poster_counts.json)",
+  "source": [
+   "https://innoacademy.engg.hku.hk/workshop/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "compare",
+  "question": "Which year has the most workshop posters on the Innovation Academy website?",
+  "answer": "2025",
+  "working": "2025: 31, the highest of 2021-2026",
+  "source": [
+   "https://innoacademy.engg.hku.hk/workshop/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "compare",
+  "question": "How many more workshop posters are there for 2025 than for 2024 on the Innovation Academy website?",
+  "answer": "8",
+  "working": "31 - 23",
+  "source": [
+   "https://innoacademy.engg.hku.hk/workshop/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "compare",
+  "question": "Which edition of Pitch New Tech Ideas shortlisted more finalists, 2025 or 2026?",
+  "answer": "2025",
+  "working": "7 vs 6. TRAP: the 2023 and 2024 pages still show an old '5 proposals ... March 2, 2022' block",
+  "source": [
+   "https://innoacademy.engg.hku.hk/pitching_2025/",
+   "https://innoacademy.engg.hku.hk/pitching_2026/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "two-part",
+  "question": "When was the Pitch New Tech Ideas 2026 contest held, and how many proposals were shortlisted for it?",
+  "answer": "March 25, 2026; 6 proposals",
+  "working": "",
+  "source": [
+   "https://innoacademy.engg.hku.hk/pitching_2026/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "two-part",
+  "question": "What is the quota of the Pitching 2026 workshop on Effective Presentation with Slide Deck and Video, and who is its instructor?",
+  "answer": "20; Mr Kelvin Ip",
+  "working": "",
+  "source": [
+   "https://innoacademy.engg.hku.hk/pitching_2026/pitchworkshop26/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "two-part",
+  "question": "Which team gave the Pitching Workshop Series sharing session on February 3, 2026, and which competition had they won?",
+  "answer": "Innogrow; HKAE Pitching Competition 2024-25",
+  "working": "",
+  "source": [
+   "https://innoacademy.engg.hku.hk/pitching_2026/pitchworkshop26/"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ },
+ {
+  "level": 4,
+  "type": "two-part",
+  "question": "What is the room number of the Digital Learning Studio, and how many chairs does it have?",
+  "answer": "IW-LG07; 30",
+  "working": "lv5 notes",
+  "source": [
+   "lv5_photos/digital_learning_studio/notes.txt"
+  ],
+  "verified": false,
+  "by": "team1-peak"
+ }
+]
