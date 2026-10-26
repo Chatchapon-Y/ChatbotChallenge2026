@@ -85,8 +85,10 @@ ZONE_FOLDERS = {
     "open_event_area":            "Open event area",
     "lg_corridor_posters":        "LG/F corridors",
     "staircase_lg_to_gf_posters": "staircase between LG/F and G/F",
+    "photo_gallery":              "photo gallery (history of HKU Engineering)",
 }
-POSTER_FOLDERS = {"lg_corridor_posters", "staircase_lg_to_gf_posters"}
+# Framed posters and photos with a caption: readable whole, one call each.
+POSTER_FOLDERS = {"lg_corridor_posters", "staircase_lg_to_gf_posters", "photo_gallery"}
 # The same four photos of the open event area were also put in Makerspace
 # A's folder (the "OPEN EVENT AREA" stand is in them). Indexed there, they
 # would give Makerspace A V-shaped tables and grey chairs.

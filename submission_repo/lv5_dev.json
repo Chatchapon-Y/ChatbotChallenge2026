@@ -353,5 +353,113 @@
    "innowing-photo://open-event-area"
   ],
   "type": "colour"
+ },
+ {
+  "level": 5,
+  "question": "Around what year was the photo of the Thirty-ton Testing Machine in the photo gallery taken?",
+  "answer": "Circa 1918",
+  "source": [
+   "innowing-photo://photo-gallery-(history-of-hku-engineering)"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "Who was the first Dean of Engineering, according to the photo gallery?",
+  "answer": "Prof C.A. Middleton Smith",
+  "source": [
+   "innowing-photo://photo-gallery-(history-of-hku-engineering)"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "According to the Turn Right sign, how far away is Tam Wing Fan Inno Wing Two?",
+  "answer": "Approx. 40.00m",
+  "source": [
+   "innowing-photo://photo-gallery-(history-of-hku-engineering)"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "What colour is the Turn Right sign pointing to Inno Wing Two?",
+  "answer": "Purple with white text",
+  "source": [
+   "innowing-photo://photo-gallery-(history-of-hku-engineering)"
+  ],
+  "type": "colour"
+ },
+ {
+  "level": 5,
+  "question": "According to the photo gallery, in which year was the Department of Computer Science established?",
+  "answer": "1988",
+  "source": [
+   "innowing-photo://photo-gallery-(history-of-hku-engineering)"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "Where did HKU Engineering students go to build a small-scale hydro-power system, according to the photo gallery?",
+  "answer": "A rural village in Thailand",
+  "source": [
+   "innowing-photo://photo-gallery-(history-of-hku-engineering)"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "According to the photo gallery, in which year was the first Engineering Inno Show?",
+  "answer": "2019",
+  "source": [
+   "innowing-photo://photo-gallery-(history-of-hku-engineering)"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "Which professors gave Tech Talks shown in the photo gallery?",
+  "answer": "Professor Yuguo Li, Professor Anderson H.C. Shum and Professor Norman C. Tien",
+  "source": [
+   "innowing-photo://photo-gallery-(history-of-hku-engineering)"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "Who made donations in support of Innovation Academy in 2021, according to the photo gallery?",
+  "answer": "Philomathia Foundation and Mrs May Tam",
+  "source": [
+   "innowing-photo://photo-gallery-(history-of-hku-engineering)"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "When was the photo of the Electrical Machinery Laboratory in the photo gallery taken?",
+  "answer": "Circa 1933",
+  "source": [
+   "innowing-photo://photo-gallery-(history-of-hku-engineering)"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "In which year did the industrial training trip to Tsinghua University shown in the photo gallery take place?",
+  "answer": "1994",
+  "source": [
+   "innowing-photo://photo-gallery-(history-of-hku-engineering)"
+  ],
+  "type": "text"
+ },
+ {
+  "level": 5,
+  "question": "In whose memory is the plaque in the photo gallery?",
+  "answer": "Mr Tam Wing Fan",
+  "source": [
+   "innowing-photo://photo-gallery-(history-of-hku-engineering)"
+  ],
+  "type": "text"
  }
 ]
