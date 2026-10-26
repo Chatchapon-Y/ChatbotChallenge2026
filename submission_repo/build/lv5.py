@@ -277,12 +277,14 @@ def index_photos(cache: dict) -> None:
         })
         ids.append(id_)
 
-    keys = set(photos())
     ocr = json.loads(LOCAL_OCR.read_text(encoding="utf-8")) if LOCAL_OCR.exists() else {}
     posters = (json.loads(LOCAL_POSTERS.read_text(encoding="utf-8"))
                if LOCAL_POSTERS.exists() else {})
     for n, (key, text) in enumerate(sorted(cache.items())):
-        if key in MISFILED or ("/" in key and key not in keys):
+        # The photos themselves are not in git (1.4 GB): a teammate who
+        # pulls has the descriptions and notes but no files, and must get
+        # the same index.
+        if key in MISFILED:
             continue
         zone, spot = zone_of(key), spot_of(key)
         where = f"in the {zone}" + (f", {spot}" if spot else "")
