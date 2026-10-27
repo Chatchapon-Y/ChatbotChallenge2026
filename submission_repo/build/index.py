@@ -54,10 +54,11 @@ PASSWORD_TEXT = re.compile(
 BOILERPLATE_MIN_PAGES = 20
 MIN_PAGE_CHARS = 50
 
-# The challenge's own announcement pages list the dev set questions with
-# their answers. Indexing them makes the dev set score look better than
-# the bot is, and the hidden test questions are not on them.
-EXCLUDE_URLS = ("/aichallenge/", "/ai-chatbot-challenge-inno-trivia")
+# The challenge's announcement page lists the dev set questions with their
+# answers, so it was left out to keep dev scores honest. It is back in: the
+# funding page has since dropped the 2025-26 first round deadline, and the
+# benchmark asks for it. The duplicate page is still left out.
+EXCLUDE_URLS = ("/ai-chatbot-challenge-inno-trivia",)
 
 
 def split_sentences(text: str) -> list[str]:

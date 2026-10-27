@@ -310,6 +310,21 @@ INSIDE = re.compile(
     r"|colou?r|inside|located|next to|behind|in front of|LG/?F|G/F|IW-", re.I)
 
 
+def words(text: str) -> str:
+    return " ".join(re.findall(r"[a-z0-9]+", text.lower()))
+
+
+def asked_on_page(question: str, chunk: dict) -> bool:
+    """True if the chunk contains the question word for word.
+
+    A page that lists the question (an FAQ, the challenge's example table)
+    has its answer right after it. Vector search misses such a chunk when
+    the rest of it is about other things, so RRF alone drops it.
+    """
+    q = words(question)
+    return len(q) > 30 and q in words(chunk["text"])
+
+
 def ranked_search(store, question: str, k: int, n: int, where: dict | None,
                   photos: bool) -> list[dict]:
     years = list(set(YEAR.findall(question)))
@@ -328,8 +343,10 @@ def ranked_search(store, question: str, k: int, n: int, where: dict | None,
             scores[key] = scores.get(key, 0) + 1 / (RRF_K + rank + 1)
             chunks.setdefault(key, c)
     # Chunks about another year go to the back, behind every other
-    # candidate; local-model descriptions just before them.
+    # candidate; local-model descriptions just before them. A chunk that
+    # contains the question itself comes first.
     best = sorted(scores, key=lambda key: (other_year(years, chunks[key]),
+                                           not asked_on_page(question, chunks[key]),
                                            is_local(chunks[key]), -scores[key]))[:k]
     return [{**chunks[key], "rrf": scores[key]} for key in best]
 
@@ -402,13 +419,20 @@ def rag_answer(question: str) -> str:
         f"[{c['metadata'].get('url', '?')}]\n{clip(c)}" for c in chunks
     )
 
+    # gpt-4o-mini passes over an FAQ line that already holds the answer
+    # and builds one from another page, so it is pointed at it.
+    faq = next((c for c in chunks if asked_on_page(question, c)), None)
+    question_line = question
+    if faq:
+        question_line += (f"\n\n(The passage from {faq['metadata']['url']} contains "
+                          "this exact question; give the answer written right after it there.)")
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}"},
+        {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question_line}"},
     ]
     with_note = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}\n\n{note}"},
+        {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question_line}\n\n{note}"},
     ]
     reply = reason(with_note) if note else ""
     if not reply.strip() and kind:
