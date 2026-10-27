@@ -307,13 +307,17 @@ def search(store, question: str, k: int, where: dict = None) -> list[dict]:
     the /venue/ page out, and a Lv5 question still needs them.
     """
     web = ranked_search(store, question, k, CONFIG["candidates"], where, photos=False)
-    n = CONFIG["photos"] if INSIDE.search(question) else min(CONFIG["photos"], 2)
+    n = (0 if ONLINE.search(question)
+         else CONFIG["photos"] if INSIDE.search(question) else min(CONFIG["photos"], 2))
     if where is not None or n <= 0:
         return web
     return web + ranked_search(store, question, n, PHOTO_CANDIDATES,
                                {"kind": "photo"}, photos=True)
 
 
+# "...shown as icons on the Wet Lab page" asks about the website: a photo
+# of a sign in the building answered it with the wrong icons.
+ONLINE = re.compile(r"\b(web ?page|page|website|web ?site|online)\b", re.I)
 PHOTO_CANDIDATES = 30   # 15 missed the stair-step notes behind "ENGINEERING"
 # A question about the building itself names a place in it or a thing you
 # see there. Others get only 2 photo chunks: each is 2-5k characters.
