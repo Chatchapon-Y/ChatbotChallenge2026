@@ -6,7 +6,7 @@ All three tasks finished on 25 Oct 2026 (about 13:00). The script is `lv5_local.
 ## Counts
 | Task | Output | Result |
 |---|---|---|
-| A: OCR | `lv5_ocr_local.json` | **181 / 181 photos**, 7,782 lines in total (median 35 per photo). 3 photos have `""`: `brainstorming/left_iw-lg14_dream_chamber/IMG_1276.JPG`, `digital_learning_studio/01_inside_wide/IMG_1306.JPG`, `makerspace_a/04_closeup_signs_equipment/IMG_1430.JPG`. |
+| A: OCR | `lv5_ocr_local.json` | **261 / 261 photos** after Monday (see the end). First batch: 181 / 181, 7,782 lines in total (median 35 per photo). 3 photos have `""`: `brainstorming/left_iw-lg14_dream_chamber/IMG_1276.JPG`, `digital_learning_studio/01_inside_wide/IMG_1306.JPG`, `makerspace_a/04_closeup_signs_equipment/IMG_1430.JPG`. |
 | B: posters | `lv5_posters_local.json` | **115 / 115 photos**, 662 poster/sign lines. 3 photos have `[]` (`makerspace_a/04_closeup_signs_equipment/IMG_1428–1430`, tool-box shelves with no posters). |
 | C: icon colours | `colours_local.json` | **133 / 133** skipped icons coloured, 0 failed. The file now covers all 3,572 entries of `colours_todo.json`. |
 
@@ -98,12 +98,24 @@ and Project Progress.
   - `lv5_*_log.txt`: run logs.
 - **Not committed:** the photos in `lv5_raw/`.
 
-## Monday's photos (26 Oct)
-Extract the new zip over `lv5_raw/`, then run:
-```
-python lv5_local.py ocr
-python lv5_local.py posters
-```
-Both resume, so only the new photos are processed. Allow about 40 s per photo for
-each task. The two can run at the same time, since OCR uses the CPU and posters use
-the GPU.
+## Monday's photos (added 27 Oct)
+- **New photos:** 80, all in a new folder, `photo_gallery/`. It is the faculty
+  history gallery: framed historic photos with printed captions, plaques, the
+  Tam Wing Fan Innovation Wing sign, the purple "Turn Right… Approx. 40.00m" sign,
+  and the "How to Become an InnoWing Member?" boards. This folder has no
+  `notes.txt`. All the earlier folders are unchanged.
+- **Task A:** done for all 80. `lv5_ocr_local.json` now has **261 / 261 photos**.
+  - The gallery adds 1,286 lines.
+  - Only `photo_gallery/IMG_1501.JPG` has `""`.
+  - Captions are read exactly, apart from some missing spaces. Examples:
+    "Thirty-tonTesting Machine,circa 1918", "Cement Testing Machine, circa 1932",
+    "Site Visit to Tam Wing Fan Innovation Wing,2020",
+    "Opening Ceremony for Tam Wing Fan Innovation Wing Two,2021",
+    "Access to InnoWing One will be provided within two business days."
+  - `IMG_1458` is noisy. A plaque is reflected in the sign's glass, so it gives
+    many word fragments.
+- **Task B:** nothing new. `photo_gallery` is neither a poster folder nor has
+  "sign" in its name, so the brief's rule leaves it out. `lv5_posters_local.json`
+  is still 115 photos.
+- **Near-duplicates:** `IMG_E1533.JPG` and `IMG_E1535.JPG` are iPhone edited
+  copies of `IMG_1533`/`IMG_1535`. Both have their own key. Expect duplicate hits.
